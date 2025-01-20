@@ -1,0 +1,76 @@
+.post {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: .5em;
+    padding-bottom: .5em;
+    border-bottom: #748CAB 1px solid;
+}
+
+.userDetails {
+    display: flex;
+    flex-direction: row;
+}
+
+.avatar {
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 50%;
+    margin-right: .4em;
+}
+
+.username {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #091829;
+}
+
+.restaurantName {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #091829;
+}
+
+.star {
+    width: 1.1em;
+    height: 1.1em;
+}
+
+.content {
+    margin-top: 10px;
+    font-size: 1.2em;
+    color: #091829;
+}
+
+.image {
+    width: 100%;
+    height: auto;
+}
+
+.actionButton {
+    border-radius: 0.7em;
+    border: #748CAB 1px solid;
+    background-color: #748CAB;
+    color: #F0EBD8;
+    padding: 0.2em 0.3em 0.3em;
+    transition: background-color .2s, border-color .2s, color .2s;
+    cursor: pointer;
+    margin-right: .5em;
+    margin-top: .5em;
+    font-size: .8em;
+}
+
+.actionButton:hover {
+    background-color: #F0EBD8;
+    color: #1D2D44;
+    border-color: #1D2D44;
+}
+
+.actionButton:active {
+    background-color: #ffffff;
+}
+
+.postsList {
+    overflow-y: scroll;
+    height: 100%;
+    padding-right: .2em;
+}
