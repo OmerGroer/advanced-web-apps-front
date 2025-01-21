@@ -28,4 +28,12 @@ const getAllPosts = () => {
   return { request, abort: () => abortController.abort() };
 };
 
-export default { getAllPosts };
+const getPostById = (postId: string) => {
+  const abortController = new AbortController();
+  const request = apiClient.get<Post | null>(`/posts/${postId}`, {
+    signal: abortController.signal,
+  });
+  return { request, abort: () => abortController.abort() };
+};
+
+export default { getAllPosts, getPostById };
