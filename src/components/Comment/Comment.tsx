@@ -1,20 +1,39 @@
 import { FC, useState } from "react";
-import { Comment as IComment } from "../../services/commentService";
+import commentService, {
+  Comment as IComment,
+} from "../../services/commentService";
 import style from "./Comment.module.css";
 import { Menu, MenuItem } from "@mui/material";
 import MenuImage from "../../assets/menu.svg";
 import { getLoggedUserId } from "../../services/apiClient";
+import { toast } from "react-toastify";
 
 interface CommentProps {
   comment: IComment;
+  onDelete: (commentId: string) => void;
 }
 
-const Comment: FC<CommentProps> = ({ comment }) => {
+const Comment: FC<CommentProps> = ({ comment, onDelete }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLImageElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const onDeleteClick = () => {
+    commentService
+      .deleteComment(comment._id)
+      .then(() => {
+        setAnchorEl(null);
+        onDelete(comment._id)
+      })
+      .catch((error) => {
+        toast.error(error.message);
+        setAnchorEl(null);
+      });
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -52,7 +71,7 @@ const Comment: FC<CommentProps> = ({ comment }) => {
         }}
       >
         <MenuItem onClick={handleClose}>Edit</MenuItem>
-        <MenuItem onClick={handleClose}>Delete</MenuItem>
+        <MenuItem onClick={onDeleteClick}>Delete</MenuItem>
       </Menu>
     </>
   );

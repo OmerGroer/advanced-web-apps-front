@@ -39,6 +39,10 @@ const PostModal: FC<PostModalProps> = ({ postId, onClose }) => {
     setComments((prevComments) => [comment, ...prevComments]);
   };
 
+  const onCommentDelete = (commentId: string) => {
+    setComments((prevComments) => prevComments.filter(comment => comment._id !== commentId));
+  }
+
   return createPortal(
     <div className={style.backdrop} onClick={onClose}>
       <div className={style.modal} onClick={onModalClick}>
@@ -51,7 +55,7 @@ const PostModal: FC<PostModalProps> = ({ postId, onClose }) => {
         </div>
         <div>
           <div className={style.commentsListContainer}>
-            <CommentsList comments={comments} isLoading={isLoadingComments} />
+            <CommentsList comments={comments} isLoading={isLoadingComments} onDelete={onCommentDelete} />
           </div>
           <div className={style.commentFormContainer}>
             <CommentForm postId={postId} onSubmit={onCommentSubmit} />
