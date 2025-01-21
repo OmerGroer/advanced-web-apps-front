@@ -28,6 +28,7 @@ const PostModal: FC<PostModalProps> = ({ postId, onClose }) => {
   return createPortal(
     <div className={style.backdrop} onClick={onClose}>
       <div className={style.modal} onClick={onModalClick}>
+        <span className={style.x} onClick={onClose}>×</span>
         <div className={style.postContainer}>{post && <Post post={post!} />} {isLoading && <CircularProgress />}</div>
         <CommentsList postId={postId} />
       </div>
