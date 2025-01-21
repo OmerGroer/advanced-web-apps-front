@@ -1,0 +1,57 @@
+.backdrop {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+}
+
+.modal {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    background-color: #F0EBD8;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    display: flex;
+    flex-direction: row;
+}
+
+.modal>div {
+    flex: 1;
+}
+
+.modal>div:first-child {
+    margin-right: .2em;
+}
+
+.modal>div:last-child {
+    margin-left: .2em;
+}
+
+.postContainer {
+    overflow-y: scroll;
+    padding-right: .2em;
+}
+
+.x {
+    position: absolute;
+    top: 0;
+    left: .1em;
+    cursor: pointer;
+    font-weight: bold;    
+    font-size: 1em;
+}
+
+.commentsListContainer {
+    height: 93%;
+}
+
+.commentFormContainer {
+    height: 7%;
+}

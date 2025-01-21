@@ -6,7 +6,7 @@ const apiClient = axios.create({
   baseURL: import.meta.env.VITE_SERVER_URL,
   headers: {
     authorization:
-      "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzhiODA5NzIxNzRiMDViY2FlYWJmZTYiLCJyYW5kb20iOiIwLjE5OTA4NjY5MzMzNzkzMzM4IiwiaWF0IjoxNzM3NDc2MDUzLCJleHAiOjE3Mzc0ODY4NTN9.NVwqp2OeX-UeHtDxtknULJ2g4n5nj8yhiU_iAGxUktU",
+      "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzhiODA5NzIxNzRiMDViY2FlYWJmZTYiLCJyYW5kb20iOiIwLjU5ODI5NTk5Mzk4MjY4MjgiLCJpYXQiOjE3Mzc0ODY4ODMsImV4cCI6MTczNzQ5NzY4M30.YPkE2C1lAJHV-dZloMm0XEw-RMsT34UDLduhOzypWFM",
   },
 });
 

@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import postService, { Post } from "../services/postService";
 import { CanceledError } from "../services/apiClient";
+import commentService, { Comment } from "../services/commentService";
 
-const usePosts = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+const useCommentsByPostId = (postId: string) => {
+  const [comments, setComments] = useState<Comment[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setIsLoading(true);
-    const { request, abort } = postService.getAllPosts();
+    const { request, abort } = commentService.getCommentsByPostId(postId);
     request
       .then((res) => {
-        setPosts(res.data);
+        setComments(res.data);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -25,7 +25,7 @@ const usePosts = () => {
     return abort;
   }, []);
 
-  return { posts, error, isLoading };
+  return { comments, setComments, error, isLoading };
 };
 
-export default usePosts;
+export default useCommentsByPostId;

@@ -1,57 +1,39 @@
-import { FC, useEffect } from "react";
+import { FC, useState } from "react";
 import style from "./PostsList.module.css";
-import starImg from "../../assets/star_on.png";
 import usePosts from "../../hooks/usePosts";
-import { toast } from "react-toastify";
 import { CircularProgress } from "@mui/material";
+import PostModal from "../PostModal/PostModal";
+import Post from "../Post/Post";
+import useToastError from "../../hooks/useRoastError";
 
 const PostsList: FC = () => {
-  const { posts, isLoading, error } = usePosts()
+  const { posts, isLoading, error } = usePosts();
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
-  }, [error]);
+  useToastError(error)
 
   return (
     <div className={style.postsList}>
       {posts.map((post) => (
-        <div key={post._id} className={style.post}>
-          <div className={style.userDetails}>
-            <img
-              src={`${import.meta.env.VITE_SERVER_URL}${post.sender.avatarUrl}`}
-              alt={post.sender.username}
-              className={style.avatar}
-            />
-            <span className={style.username}>{post.sender.username}</span>
-          </div>
-          <div>
-            <span className={style.restaurantName}>{post.restaurant.name}</span>
-            {Array.from({ length: post.rating }).map((_, index) => (
-              <img
-                key={index}
-                src={starImg}
-                alt="star"
-                className={style.star}
-              />
-            ))}
-          </div>
-          <p className={style.content}>{post.content}</p>
-          <img
-            src={`${import.meta.env.VITE_SERVER_URL}${post.imageUrl}`}
-            alt={post.restaurant.name}
-            className={style.image}
-          />
+        <Post key={post._id} post={post}>
           <div className={style.actions}>
-            <button className={style.actionButton}>
+            <button className={"actionButton"}>
               {post.isLiked ? "Unlike" : "Like"}
             </button>
-            <button className={style.actionButton}>{`Comment (${post.numberOfComments})`}</button>
+            <button
+              className={"actionButton"}
+              onClick={() => setSelectedPostId(post._id)}
+            >{`Comment (${post.numberOfComments})`}</button>
           </div>
-        </div>
+        </Post>
       ))}
       {isLoading && <CircularProgress />}
+      {selectedPostId && (
+        <PostModal
+          postId={selectedPostId}
+          onClose={() => setSelectedPostId(null)}
+        />
+      )}
     </div>
   );
 };

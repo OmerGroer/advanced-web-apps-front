@@ -1,6 +1,4 @@
-import apiClient, { CanceledError } from "./apiClient";
-
-export { CanceledError };
+import apiClient from "./apiClient";
 
 export interface Post {
   _id: string;
@@ -28,4 +26,12 @@ const getAllPosts = () => {
   return { request, abort: () => abortController.abort() };
 };
 
-export default { getAllPosts };
+const getPostById = (postId: string) => {
+  const abortController = new AbortController();
+  const request = apiClient.get<Post | null>(`/posts/${postId}`, {
+    signal: abortController.signal,
+  });
+  return { request, abort: () => abortController.abort() };
+};
+
+export default { getAllPosts, getPostById };
