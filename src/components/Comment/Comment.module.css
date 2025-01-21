@@ -1,0 +1,27 @@
+.userDetails {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.userDetails>div {
+    display: flex;
+    flex-direction: row;
+}
+
+.avatar {
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 50%;
+    margin-right: .4em;
+}
+
+.username {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #091829;
+}
+
+.menu {
+    cursor: pointer;
+}

@@ -10,4 +10,7 @@ const apiClient = axios.create({
   },
 });
 
+//TODO: not here
+export const getLoggedUserId = () => "678b80972174b05bcaeabfe6"
+
 export default apiClient;
