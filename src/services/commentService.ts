@@ -19,4 +19,11 @@ const getCommentsByPostId = (postId: string) => {
   return { request, abort: () => abortController.abort() };
 };
 
-export default { getCommentsByPostId };
+const createComment = (postId: string, content: string) => {
+  return apiClient.post<Comment>(`/comments`, {
+    postId,
+    content,
+  });
+};
+
+export default { getCommentsByPostId, createComment };

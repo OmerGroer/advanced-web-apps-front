@@ -1,0 +1,17 @@
+.input {
+    width: 75%;
+    height: 100%;
+    font-size: .8em;
+    border-radius: 0.7em;
+}
+
+.button {
+    width: 6em;
+}
+
+.form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+}

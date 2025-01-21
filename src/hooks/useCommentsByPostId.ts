@@ -25,7 +25,7 @@ const useCommentsByPostId = (postId: string) => {
     return abort;
   }, []);
 
-  return { comments, error, isLoading };
+  return { comments, setComments, error, isLoading };
 };
 
 export default useCommentsByPostId;
