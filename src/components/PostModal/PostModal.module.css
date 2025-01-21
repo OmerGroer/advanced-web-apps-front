@@ -26,6 +26,14 @@
     flex: 1;
 }
 
+.modal>div:first-child {
+    margin-right: .2em;
+}
+
+.modal>div:last-child {
+    margin-left: .2em;
+}
+
 .postContainer {
     overflow-y: scroll;
     padding-right: .2em;

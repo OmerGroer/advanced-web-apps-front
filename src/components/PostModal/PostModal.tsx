@@ -5,6 +5,7 @@ import usePostById from "../../hooks/usePostById";
 import Post from "../Post/Post";
 import { CircularProgress } from "@mui/material";
 import { toast } from "react-toastify";
+import CommentsList from "../CommentsList/CommentsList";
 
 interface PostModalProps {
   postId: string;
@@ -28,7 +29,7 @@ const PostModal: FC<PostModalProps> = ({ postId, onClose }) => {
     <div className={style.backdrop} onClick={onClose}>
       <div className={style.modal} onClick={onModalClick}>
         <div className={style.postContainer}>{post && <Post post={post!} />} {isLoading && <CircularProgress />}</div>
-        <div></div>
+        <CommentsList postId={postId} />
       </div>
     </div>,
     document.getElementById("root")!

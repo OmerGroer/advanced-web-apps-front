@@ -1,6 +1,4 @@
-import apiClient, { CanceledError } from "./apiClient";
-
-export { CanceledError };
+import apiClient from "./apiClient";
 
 export interface Post {
   _id: string;
