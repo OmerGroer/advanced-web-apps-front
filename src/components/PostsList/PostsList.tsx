@@ -1,13 +1,19 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import style from "./PostsList.module.css";
 import starImg from "../../assets/star_on.png";
-import { Post } from "../../services/postService";
+import usePosts from "../../hooks/usePosts";
+import { toast } from "react-toastify";
+import { CircularProgress } from "@mui/material";
 
-interface PostsListProps {
-  posts: Post[];
-}
+const PostsList: FC = () => {
+  const { posts, isLoading, error } = usePosts()
 
-const PostsList: FC<PostsListProps> = ({ posts }) => {
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
   return (
     <div className={style.postsList}>
       {posts.map((post) => (
@@ -45,6 +51,7 @@ const PostsList: FC<PostsListProps> = ({ posts }) => {
           </div>
         </div>
       ))}
+      {isLoading && <CircularProgress />}
     </div>
   );
 };
