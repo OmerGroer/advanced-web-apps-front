@@ -28,7 +28,7 @@ const getAllPosts = () => {
 
 const getPostById = (postId: string) => {
   const abortController = new AbortController();
-  const request = apiClient.get<Post | null>(`/posts/${postId}`, {
+  const request = apiClient.get<Post>(`/posts/${postId}`, {
     signal: abortController.signal,
   });
   return { request, abort: () => abortController.abort() };
