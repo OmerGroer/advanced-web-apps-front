@@ -1,8 +1,8 @@
-import { Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 import style from "./App.module.css";
-import Feed from "../Feed/Feed";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Navbar, { Endpoints } from "../Navbar/Navbar";
 
 function App() {
   return (
@@ -21,9 +21,11 @@ function App() {
       />
       <div className={style.main}>
         <Routes>
-          <Route path="/" element={<Feed />} />
+          {Endpoints.map(endpoint => <Route path={endpoint.path} element={endpoint.element} />)}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
+      <Navbar />
     </>
   );
 }

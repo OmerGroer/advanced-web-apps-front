@@ -75,3 +75,7 @@ img {
 .actionButton:active {
   background-color: #ffffff;
 }
+
+a {
+  text-decoration: inherit;
+}

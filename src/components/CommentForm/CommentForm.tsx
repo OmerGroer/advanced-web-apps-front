@@ -2,6 +2,7 @@ import { FC, Ref, useActionState, useImperativeHandle, useRef } from "react";
 import style from "./CommentForm.module.css";
 import commentService, { Comment } from "../../services/commentService";
 import { toast } from "react-toastify";
+import classNames from "classnames";
 
 interface CommentFormProps {
   postId: string;
@@ -68,7 +69,7 @@ const CommentForm: FC<CommentFormProps> = ({ postId, onSubmit, ref }) => {
       <button
         type="submit"
         disabled={isPending}
-        className={`actionButton ${style.button}`}
+        className={classNames("actionButton", style.button)}
       >
         Send
       </button>
