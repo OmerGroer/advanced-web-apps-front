@@ -9,8 +9,12 @@ import postService, { Post as IPost } from "../../services/postService";
 import likeService from "../../services/likeService";
 import { toast } from "react-toastify";
 
-const PostsList: FC = () => {
-  const { posts, setPosts, isLoading, error } = usePosts();
+interface PostsListProps {
+  userId?: string;
+}
+
+const PostsList: FC<PostsListProps> = ({ userId }) => {
+  const { posts, setPosts, isLoading, error } = usePosts(userId);
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
   useToastError(error);
@@ -41,17 +45,17 @@ const PostsList: FC = () => {
   };
 
   const onCloseModal = () => {
-    setSelectedPostId(prevId => {
-      if (prevId !== null) refershPost(prevId)
-      return null
-    })
-  }
+    setSelectedPostId((prevId) => {
+      if (prevId !== null) refershPost(prevId);
+      return null;
+    });
+  };
 
   return (
     <div className={style.postsList}>
       {posts.map((post) => (
-        <Post key={post._id} post={post}>
-          <div className={style.actions}>
+        <Post key={post._id} post={post} withoutUser={!!userId}>
+          <div>
             <button
               className={"actionButton"}
               onClick={() => onLikeClick(post)}
@@ -67,10 +71,7 @@ const PostsList: FC = () => {
       ))}
       {isLoading && <CircularProgress />}
       {selectedPostId && (
-        <PostModal
-          postId={selectedPostId}
-          onClose={onCloseModal}
-        />
+        <PostModal postId={selectedPostId} onClose={onCloseModal} />
       )}
     </div>
   );
