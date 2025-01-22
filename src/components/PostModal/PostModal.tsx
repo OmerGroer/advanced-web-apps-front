@@ -5,10 +5,7 @@ import usePostById from "../../hooks/usePostById";
 import Post from "../Post/Post";
 import { CircularProgress } from "@mui/material";
 import CommentsList from "../CommentsList/CommentsList";
-import CommentForm from "../CommentForm/CommentForm";
-import useCommentsByPostId from "../../hooks/useCommentsByPostId";
 import useToastError from "../../hooks/useRoastError";
-import { Comment } from "../../services/commentService";
 
 interface PostModalProps {
   postId: string;
@@ -16,27 +13,12 @@ interface PostModalProps {
 }
 
 const PostModal: FC<PostModalProps> = ({ postId, onClose }) => {
-  const {
-    post,
-    error: postError,
-    isLoading: isLoadingPosts,
-  } = usePostById(postId);
-  const {
-    comments,
-    setComments,
-    isLoading: isLoadingComments,
-    error: commentError,
-  } = useCommentsByPostId(postId);
+  const { post, error, isLoading } = usePostById(postId);
 
-  useToastError(postError);
-  useToastError(commentError);
+  useToastError(error);
 
   const onModalClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
-  };
-
-  const onCommentSubmit = (comment: Comment) => {
-    setComments((prevComments) => [comment, ...prevComments]);
   };
 
   return createPortal(
@@ -46,16 +28,10 @@ const PostModal: FC<PostModalProps> = ({ postId, onClose }) => {
           ×
         </span>
         <div className={style.postContainer}>
-          {post && <Post post={post!} />}{" "}
-          {isLoadingPosts && <CircularProgress />}
+          {post && <Post post={post!} />} {isLoading && <CircularProgress />}
         </div>
         <div>
-          <div className={style.commentsListContainer}>
-            <CommentsList comments={comments} isLoading={isLoadingComments} />
-          </div>
-          <div className={style.commentFormContainer}>
-            <CommentForm postId={postId} onSubmit={onCommentSubmit} />
-          </div>
+          <CommentsList postId={postId} />
         </div>
       </div>
     </div>,
