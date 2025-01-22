@@ -11,9 +11,10 @@ import { toast } from "react-toastify";
 interface CommentProps {
   comment: IComment;
   onDelete: (commentId: string) => void;
+  onUpdate: (commment: IComment) => void;
 }
 
-const Comment: FC<CommentProps> = ({ comment, onDelete }) => {
+const Comment: FC<CommentProps> = ({ comment, onDelete, onUpdate }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -33,6 +34,12 @@ const Comment: FC<CommentProps> = ({ comment, onDelete }) => {
         setAnchorEl(null);
       });
   };
+
+  const onUpdateClick = () => {
+    onUpdate(comment)
+    setAnchorEl(null);
+
+  }
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -70,7 +77,7 @@ const Comment: FC<CommentProps> = ({ comment, onDelete }) => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>Edit</MenuItem>
+        <MenuItem onClick={onUpdateClick}>Edit</MenuItem>
         <MenuItem onClick={onDeleteClick}>Delete</MenuItem>
       </Menu>
     </>

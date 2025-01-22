@@ -26,8 +26,14 @@ const createComment = (postId: string, content: string) => {
   });
 };
 
+const updateComment = (commentId: string, content: string) => {
+  return apiClient.put<Comment>(`/comments/${commentId}`, {
+    content,
+  });
+};
+
 const deleteComment = (commentId: string) => {
   return apiClient.delete<Comment>(`/comments/${commentId}`);
 };
 
-export default { getCommentsByPostId, createComment, deleteComment };
+export default { getCommentsByPostId, createComment, deleteComment, updateComment };

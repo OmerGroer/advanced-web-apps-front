@@ -1,4 +1,8 @@
-.commentsList {
+.commentsListContainer {
     overflow-y: scroll;
-    height: 100%;
+    height: 93%;
+}
+
+.commentFormContainer {
+    height: 7%;
 }
