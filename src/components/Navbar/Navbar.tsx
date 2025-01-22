@@ -3,6 +3,7 @@ import style from "./Navbar.module.css";
 import Feed from "../Feed/Feed";
 import { NavLink } from "react-router";
 import classNames from "classnames";
+import Profile from "../Profile/Profile";
 
 interface Endpoint {
   name: string;
@@ -24,7 +25,7 @@ export const Endpoints: Endpoint[] = [
   {
     name: "Profile",
     path: "/profile",
-    element: <Feed />,
+    element: <Profile />,
   },
 ];
 

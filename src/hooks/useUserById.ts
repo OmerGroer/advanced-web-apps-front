@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import postService, { Post } from "../services/postService";
 import { CanceledError } from "../services/apiClient";
+import userService, { User } from "../services/userService";
 
-const usePosts = (userId?: string) => {
-  const [posts, setPosts] = useState<Post[]>([]);
+const useUserById = (userId: string) => {
+  const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setIsLoading(true);
-    const { request, abort } = postService.getAllPosts(userId);
+    const { request, abort } = userService.getUserById(userId);
     request
       .then((res) => {
-        setPosts(res.data);
+        setUser(res.data);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -25,7 +25,7 @@ const usePosts = (userId?: string) => {
     return abort;
   }, []);
 
-  return { posts, setPosts, error, isLoading };
+  return { user, error, isLoading };
 };
 
-export default usePosts;
+export default useUserById;

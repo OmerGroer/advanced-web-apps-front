@@ -1,14 +1,11 @@
 import apiClient from "./apiClient";
+import { User } from "./userService";
 
 export interface Comment {
   _id: string;
   content: string;
   postId: string;
-  sender: {
-    _id: string;
-    username: string;
-    avatarUrl: string;
-  };
+  sender: User;
 }
 
 const getCommentsByPostId = (postId: string) => {

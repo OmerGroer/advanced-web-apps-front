@@ -5,8 +5,9 @@ import commentService, {
 import style from "./Comment.module.css";
 import { Menu, MenuItem } from "@mui/material";
 import MenuImage from "../../assets/menu.svg";
-import { getLoggedUserId } from "../../services/apiClient";
 import { toast } from "react-toastify";
+import UserDetail from "../UserDetails/UserDetails";
+import userService from "../../services/userService";
 
 interface CommentProps {
   comment: IComment;
@@ -48,17 +49,8 @@ const Comment: FC<CommentProps> = ({ comment, onDelete, onUpdate }) => {
   return (
     <>
       <div className={style.userDetails}>
-        <div>
-          <img
-            src={`${import.meta.env.VITE_SERVER_URL}${
-              comment.sender.avatarUrl
-            }`}
-            alt={comment.sender.username}
-            className={style.avatar}
-          />
-          <span className={style.username}>{comment.sender.username}</span>
-        </div>
-        {comment.sender._id === getLoggedUserId() && (
+      <UserDetail user={comment.sender} style={style} />
+        {comment.sender._id === userService.getLoggedUserId() && (
           <img
             src={MenuImage}
             alt="menu"

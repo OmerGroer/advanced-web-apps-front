@@ -1,4 +1,5 @@
 import apiClient from "./apiClient";
+import { User } from "./userService";
 
 export interface Post {
   _id: string;
@@ -11,16 +12,13 @@ export interface Post {
   imageUrl: string;
   isLiked: boolean;
   numberOfComments: number;
-  sender: {
-    _id: string;
-    username: string;
-    avatarUrl: string;
-  };
+  sender: User;
 }
 
-const getAllPosts = () => {
+const getAllPosts = (userId?: string) => {
   const abortController = new AbortController();
-  const request = apiClient.get<Post[]>("/posts", {
+  const query = userId ? `?sender=${userId}` : ""
+  const request = apiClient.get<Post[]>(`/posts${query}`, {
     signal: abortController.signal,
   });
   return { request, abort: () => abortController.abort() };
