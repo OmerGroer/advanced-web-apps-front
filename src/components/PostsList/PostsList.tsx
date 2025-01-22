@@ -15,6 +15,17 @@ const PostsList: FC = () => {
 
   useToastError(error);
 
+  const refershPost = async (postId: string) => {
+    try {
+      const newPost = (await postService.getPostById(postId).request).data;
+      setPosts((prevPosts) =>
+        prevPosts.map((oldPost) => (oldPost._id !== postId ? oldPost : newPost))
+      );
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  };
+
   const onLikeClick = async (post: IPost) => {
     try {
       if (post.isLiked) {
@@ -25,18 +36,16 @@ const PostsList: FC = () => {
     } catch (error) {
       toast.error((error as Error).message);
     } finally {
-      try {
-        const newPost = (await postService.getPostById(post._id).request).data;
-        setPosts((prevPosts) =>
-          prevPosts.map((oldPost) =>
-            oldPost._id !== post._id ? oldPost : newPost
-          )
-        );
-      } catch (error) {
-        toast.error((error as Error).message);
-      }
+      await refershPost(post._id);
     }
   };
+
+  const onCloseModal = () => {
+    setSelectedPostId(prevId => {
+      if (prevId !== null) refershPost(prevId)
+      return null
+    })
+  }
 
   return (
     <div className={style.postsList}>
@@ -60,7 +69,7 @@ const PostsList: FC = () => {
       {selectedPostId && (
         <PostModal
           postId={selectedPostId}
-          onClose={() => setSelectedPostId(null)}
+          onClose={onCloseModal}
         />
       )}
     </div>
