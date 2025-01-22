@@ -25,7 +25,7 @@ const usePosts = () => {
     return abort;
   }, []);
 
-  return { posts, error, isLoading };
+  return { posts, setPosts, error, isLoading };
 };
 
 export default usePosts;
