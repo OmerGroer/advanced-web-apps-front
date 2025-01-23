@@ -21,7 +21,13 @@ function App() {
       />
       <div className={style.main}>
         <Routes>
-          {Endpoints.map(endpoint => <Route path={endpoint.path} element={endpoint.element} />)}
+          {Endpoints.map((endpoint) => (
+            <Route
+              key={endpoint.path}
+              path={endpoint.path}
+              element={endpoint.element}
+            />
+          ))}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>

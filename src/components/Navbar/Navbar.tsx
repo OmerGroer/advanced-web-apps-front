@@ -34,9 +34,16 @@ const Navbar: FC = () => {
     <div className={style.navbar}>
       <span className={style.title}>Table Talk</span>
       {Endpoints.map((endpoint) => (
-        <NavLink to={endpoint.path} end className={style.navLink}>
+        <NavLink
+          key={endpoint.path}
+          to={endpoint.path}
+          end
+          className={style.navLink}
+        >
           {({ isActive }) => (
-            <span className={classNames(style.link, {[style.active]: isActive})}>
+            <span
+              className={classNames(style.link, { [style.active]: isActive })}
+            >
               {isActive ? "👉" : ""} {endpoint.name}
             </span>
           )}

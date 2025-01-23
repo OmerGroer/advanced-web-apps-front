@@ -19,3 +19,11 @@
 .postsContainer {
     height: calc(100% - 4.5em);
 }
+
+.spinnerContainer {
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: .4em;
+}

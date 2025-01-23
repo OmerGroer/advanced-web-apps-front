@@ -1,4 +1,4 @@
-import apiClient from "./apiClient";
+import apiClient, { Page } from "./apiClient";
 import { User } from "./userService";
 
 export interface Post {
@@ -15,10 +15,14 @@ export interface Post {
   sender: User;
 }
 
-const getAllPosts = (userId?: string) => {
+const getAllPosts = (times: {min?: string, max?: string}, userId?: string) => {
   const abortController = new AbortController();
-  const query = userId ? `?sender=${userId}` : ""
-  const request = apiClient.get<Post[]>(`/posts${query}`, {
+  
+  let query = userId ? `sender=${userId}&` : ""
+  query += times.min ? `min=${times.min}&` : ""
+  query += times.max ? `max=${times.max}` : ""
+
+  const request = apiClient.get<Page<Post>>(`/posts?${query}`, {
     signal: abortController.signal,
   });
   return { request, abort: () => abortController.abort() };
