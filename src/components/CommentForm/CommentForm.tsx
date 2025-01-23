@@ -3,6 +3,7 @@ import style from "./CommentForm.module.css";
 import commentService, { Comment } from "../../services/commentService";
 import { toast } from "react-toastify";
 import classNames from "classnames";
+import { CircularProgress } from "@mui/material";
 
 interface CommentFormProps {
   postId: string;
@@ -66,6 +67,7 @@ const CommentForm: FC<CommentFormProps> = ({ postId, onSubmit, ref }) => {
         name="comment"
         className={style.input}
       />
+        {isPending && <CircularProgress size={25} />}
       <button
         type="submit"
         disabled={isPending}
