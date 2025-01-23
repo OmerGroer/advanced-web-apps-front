@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { User } from "../../services/userService";
+import Image from "../Image/Image";
 
 interface UserDetailsProps {
   user: User;
@@ -9,7 +10,7 @@ interface UserDetailsProps {
 const UserDetail: FC<UserDetailsProps> = ({ user, style }) => {
   return (
     <div className={style.userDetails}>
-      <img
+      <Image
         src={`${import.meta.env.VITE_SERVER_URL}${user.avatarUrl}`}
         alt={user.username}
         className={style.avatar}
