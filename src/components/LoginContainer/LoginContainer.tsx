@@ -46,6 +46,8 @@ const LoginContainer: FC<LoginContainerProps> = ({ setLogged }) => {
         });
 
       return abort;
+    } else {
+      setIsLoading(false);
     }
   }, []);
 

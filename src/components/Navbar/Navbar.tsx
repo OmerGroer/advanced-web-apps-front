@@ -39,6 +39,7 @@ const Navbar: FC<NavbarProps> = ({ setLoggedOut }) => {
     const refreshToken = localStorage.getItem("refreshToken");
     if (refreshToken) {
       await userService.logout(refreshToken);
+      localStorage.clear();
       setLoggedOut();
     }
   };
