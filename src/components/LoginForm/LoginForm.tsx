@@ -1,41 +1,46 @@
 import { FC, useActionState } from "react";
 import style from "./LoginForm.module.css";
 import { toast } from "react-toastify";
-import classNames from "classnames";
 import Input from "../Input/Input";
-import userService from "../../services/userService";
 import { CircularProgress } from "@mui/material";
+import { LoginFunc } from "../LoginContainer/LoginContainer";
 
 interface FormFields {
   identifier?: string;
   password?: string;
 }
 
-const onSubmit = async (_: FormFields, formData: FormData) => {
+const onSubmit = async (
+  _: FormFields,
+  formData: FormData,
+  login: LoginFunc
+) => {
   const data: FormFields = Object.fromEntries(formData);
 
   try {
     if (data.identifier && data.password) {
-      const response = await userService.login(
-        data.identifier,
-        data.password
-      ).request;
+      await login(data.identifier, data.password);
 
       return {};
     } else {
-      toast.error("Fill up the form");  
+      toast.error("Fill up the form");
     }
   } catch (error) {
-    const innerError = error as {response: {data: string}, message: string}
+    const innerError = error as { response: { data: string }; message: string };
     toast.error(innerError.response.data || innerError.message);
   }
-  
+
   return data;
 };
 
-const LoginForm: FC = () => {
+interface LoginProps {
+  login: LoginFunc;
+  switchToRegister: () => void;
+}
+
+const LoginForm: FC<LoginProps> = ({ login, switchToRegister }) => {
   const [data, submitAction, isPending] = useActionState<FormFields, FormData>(
-    onSubmit,
+    (...args) => onSubmit(...args, login),
     {}
   );
 
@@ -46,7 +51,7 @@ const LoginForm: FC = () => {
           <CircularProgress />
         </div>
       )}
-      <h1>Welcome!</h1>
+      <h1>Table Talk</h1>
       <form action={submitAction} className={style.form}>
         <Input
           label="Username or Email"
@@ -60,12 +65,17 @@ const LoginForm: FC = () => {
           name="password"
           defaultValue={data?.password}
         />
-        <button
-          type="submit"
-          className={classNames("actionButton", style.submit)}
-        >
-          Submit
-        </button>
+        <div className={style.buttonsContainer}>
+          <button
+            type="submit"
+            className={"actionButton"}
+          >
+            Submit
+          </button>
+          <button type="button" className={"actionButton"} onClick={switchToRegister}>
+            Register
+          </button>
+        </div>
       </form>
     </div>
   );

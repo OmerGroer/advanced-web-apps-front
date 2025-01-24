@@ -6,9 +6,15 @@ export interface User {
   avatarUrl: string;
 }
 
-export interface FullUser extends Omit<User, "_id"> {
+interface FullUser extends Omit<User, "_id"> {
   email: string;
   password: string;
+}
+
+interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+  _id: string;
 }
 
 const getUserById = (userId: string) => {
@@ -22,7 +28,7 @@ const getUserById = (userId: string) => {
 const uploadImg = (image: File) => {
   const formData = new FormData();
   formData.append("file", image);
-  return apiClient.post(`/file?file=${image.name}`, formData, {
+  return apiClient.post<{ url: string }>(`/file?file=${image.name}`, formData, {
     headers: {
       "Content-Type": "image/*",
     },
@@ -39,7 +45,7 @@ const register = (user: FullUser) => {
 
 const login = (identifier: string, password: string) => {
   const abortController = new AbortController();
-  const request = apiClient.post<User>(
+  const request = apiClient.post<LoginResponse>(
     `/auth/login`,
     { username: identifier, email: identifier, password },
     {

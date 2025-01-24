@@ -36,10 +36,15 @@
     color: red;
 }
 
-.submit {
-    width: 50%;
-    align-self: center;
+.buttonsContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
     margin-top: 1em;
+}
+
+.buttonsContainer button {
+    width: 40%;
 }
 
 .spinner {
