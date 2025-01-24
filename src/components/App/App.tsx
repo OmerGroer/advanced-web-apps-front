@@ -3,6 +3,7 @@ import style from "./App.module.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar, { Endpoints } from "../Navbar/Navbar";
+import RegisterForm from "../RegisterForm/RegisterForm";
 
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
         style={{ zIndex: "999999999999" }}
       />
       <div className={style.main}>
-        <Routes>
+        <RegisterForm />
+        {/* <Routes>
           {Endpoints.map((endpoint) => (
             <Route
               key={endpoint.path}
@@ -29,7 +31,7 @@ function App() {
             />
           ))}
           <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+        </Routes> */}
       </div>
       <Navbar />
     </>
