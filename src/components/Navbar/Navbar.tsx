@@ -4,6 +4,7 @@ import Feed from "../Feed/Feed";
 import { NavLink } from "react-router";
 import classNames from "classnames";
 import Profile from "../Profile/Profile";
+import userService from "../../services/userService";
 
 interface Endpoint {
   name: string;
@@ -29,7 +30,19 @@ export const Endpoints: Endpoint[] = [
   },
 ];
 
-const Navbar: FC = () => {
+interface NavbarProps {
+  setLoggedOut: () => void;
+}
+
+const Navbar: FC<NavbarProps> = ({ setLoggedOut }) => {
+  const logout = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (refreshToken) {
+      await userService.logout(refreshToken);
+      setLoggedOut();
+    }
+  };
+
   return (
     <div className={style.navbar}>
       <span className={style.title}>Table Talk</span>
@@ -49,6 +62,12 @@ const Navbar: FC = () => {
           )}
         </NavLink>
       ))}
+      <span
+        className={classNames(style.navLink, style.link, style.signout)}
+        onClick={logout}
+      >
+        Sign Out
+      </span>
     </div>
   );
 };

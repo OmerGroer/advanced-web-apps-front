@@ -36,3 +36,8 @@
     color: white;
     font-weight: bold;
 }
+
+.signout {
+    cursor: pointer;
+    margin-top: 1em;
+}

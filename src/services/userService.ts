@@ -67,6 +67,18 @@ const refresh = (refreshToken: string) => {
   return { request, abort: () => abortController.abort() };
 };
 
+const logout = (refreshToken: string) => {
+  const abortController = new AbortController();
+  const request = apiClient.post<LoginResponse>(
+    `/auth/logout`,
+    { refreshToken },
+    {
+      signal: abortController.signal,
+    }
+  );
+  return { request, abort: () => abortController.abort() };
+};
+
 const getLoggedUserId = () => localStorage.getItem("id");
 
-export default { getUserById, getLoggedUserId, register, uploadImg, login, refresh };
+export default { getUserById, getLoggedUserId, register, uploadImg, login, refresh, logout };
