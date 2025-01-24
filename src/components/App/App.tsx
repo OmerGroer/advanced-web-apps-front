@@ -39,7 +39,7 @@ function App() {
           </Routes>
         )}
       </div>
-      {isLogged && <Navbar />}
+      {isLogged && <Navbar setLoggedOut={() => setLogged(false)} />}
     </>
   );
 }

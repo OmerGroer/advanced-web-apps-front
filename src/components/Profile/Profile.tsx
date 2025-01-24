@@ -8,8 +8,11 @@ import { CircularProgress } from "@mui/material";
 import useToastError from "../../hooks/useRoastError";
 
 const Profile: FC = () => {
-  const { user, error, isLoading } = useUserById(userService.getLoggedUserId());
+  const userId = userService.getLoggedUserId();
+  const { user, error, isLoading } = useUserById(userId);
   useToastError(error);
+
+  if (!userId) return
 
   return (
     <>
@@ -20,7 +23,7 @@ const Profile: FC = () => {
         </div>
       )}
       <div className={style.postsContainer}>
-        <PostsList userId={userService.getLoggedUserId()} />
+        <PostsList userId={userId} />
       </div>
     </>
   );
