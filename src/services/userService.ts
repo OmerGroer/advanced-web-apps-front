@@ -67,6 +67,6 @@ const refresh = (refreshToken: string) => {
   return { request, abort: () => abortController.abort() };
 };
 
-const getLoggedUserId = () => "678b80972174b05bcaeabfe6";
+const getLoggedUserId = () => localStorage.getItem("id");
 
 export default { getUserById, getLoggedUserId, register, uploadImg, login, refresh };

@@ -73,14 +73,14 @@ const PostsList: FC<PostsListProps> = ({ userId }) => {
           </div>
         </Post>
       ))}
-      {isLoading &&
+      {isLoading ?
         (posts.length ? (
           <div className={style.spinner}>
             <CircularProgress />
           </div>
         ) : (
           <CircularProgress />
-        ))}
+        )) : ((posts.length === 0) && <p>There is not posts yet</p>)}
       {selectedPostId && (
         <PostModal postId={selectedPostId} onClose={onCloseModal} />
       )}
