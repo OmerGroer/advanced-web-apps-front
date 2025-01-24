@@ -25,19 +25,17 @@ const getUserById = (userId: string) => {
   return { request, abort: () => abortController.abort() };
 };
 
-const uploadImg = (image: File) => {
-  const formData = new FormData();
-  formData.append("file", image);
-  return apiClient.post<{ url: string }>(`/file?file=${image.name}`, formData, {
-    headers: {
-      "Content-Type": "image/*",
-    },
-  });
-};
-
 const register = (user: FullUser) => {
   const abortController = new AbortController();
   const request = apiClient.post<User>(`/auth/register`, user, {
+    signal: abortController.signal,
+  });
+  return { request, abort: () => abortController.abort() };
+};
+
+const update = (user: User) => {
+  const abortController = new AbortController();
+  const request = apiClient.put<User>(`/users/${user._id}`, user, {
     signal: abortController.signal,
   });
   return { request, abort: () => abortController.abort() };
@@ -81,4 +79,4 @@ const logout = (refreshToken: string) => {
 
 const getLoggedUserId = () => localStorage.getItem("id");
 
-export default { getUserById, getLoggedUserId, register, uploadImg, login, refresh, logout };
+export default { getUserById, getLoggedUserId, register, login, refresh, logout, update };

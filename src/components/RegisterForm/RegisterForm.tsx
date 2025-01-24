@@ -8,6 +8,7 @@ import Input from "../Input/Input";
 import userService from "../../services/userService";
 import { CircularProgress } from "@mui/material";
 import { LoginFunc } from "../LoginContainer/LoginContainer";
+import imageService from "../../services/imageService";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
@@ -60,7 +61,7 @@ const onSubmit = async (
       data.email &&
       data.password
     ) {
-      const imageResponse = await userService.uploadImg(data.avatar);
+      const imageResponse = await imageService.uploadImage(data.avatar);
       await userService.register({
         username: data.username,
         email: data.email,
