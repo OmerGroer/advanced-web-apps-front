@@ -3,9 +3,12 @@ import style from "./App.module.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar, { Endpoints } from "../Navbar/Navbar";
-import RegisterForm from "../RegisterForm/RegisterForm";
+import { useState } from "react";
+import LoginContainer from "../LoginContainer/LoginContainer";
 
 function App() {
+  const [isLogged, setLogged] = useState<boolean>(false);
+
   return (
     <>
       <ToastContainer
@@ -21,19 +24,22 @@ function App() {
         style={{ zIndex: "999999999999" }}
       />
       <div className={style.main}>
-        <RegisterForm />
-        {/* <Routes>
-          {Endpoints.map((endpoint) => (
-            <Route
-              key={endpoint.path}
-              path={endpoint.path}
-              element={endpoint.element}
-            />
-          ))}
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes> */}
+        {!isLogged ? (
+          <LoginContainer setLogged={() => setLogged(true)} />
+        ) : (
+          <Routes>
+            {Endpoints.map((endpoint) => (
+              <Route
+                key={endpoint.path}
+                path={endpoint.path}
+                element={endpoint.element}
+              />
+            ))}
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        )}
       </div>
-      <Navbar />
+      {isLogged && <Navbar />}
     </>
   );
 }

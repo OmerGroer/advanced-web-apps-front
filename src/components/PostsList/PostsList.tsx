@@ -28,7 +28,8 @@ const PostsList: FC<PostsListProps> = ({ userId }) => {
         prevPosts.map((oldPost) => (oldPost._id !== postId ? oldPost : newPost))
       );
     } catch (error) {
-      toast.error((error as Error).message);
+      const innerError = error as {response: {data: string}, message: string}
+      toast.error(innerError.response.data || innerError.message);
     }
   };
 
@@ -40,7 +41,8 @@ const PostsList: FC<PostsListProps> = ({ userId }) => {
         await likeService.like(post._id);
       }
     } catch (error) {
-      toast.error((error as Error).message);
+      const innerError = error as {response: {data: string}, message: string}
+      toast.error(innerError.response.data || innerError.message);
     } finally {
       await refershPost(post._id);
     }

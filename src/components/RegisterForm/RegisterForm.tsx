@@ -4,10 +4,10 @@ import avatarImage from "../../assets/avatar.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
-import classNames from "classnames";
 import Input from "../Input/Input";
 import userService from "../../services/userService";
 import { CircularProgress } from "@mui/material";
+import { LoginFunc } from "../LoginContainer/LoginContainer";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
@@ -32,7 +32,8 @@ interface FormState {
 const onSubmit = async (
   _: FormState,
   formData: FormData,
-  avatar: File | null
+  avatar: File | null,
+  login: LoginFunc
 ) => {
   const data: FormFields = Object.fromEntries(formData);
   data.avatar = avatar;
@@ -65,23 +66,31 @@ const onSubmit = async (
         email: data.email,
         password: data.password,
         avatarUrl: imageResponse.data.url,
-      });
+      }).request;
+      await login(data.username, data.password);
 
       return {};
     }
   } catch (error) {
-    toast.error((error as Error).message);
+    const innerError = error as { response: { data: string }; message: string };
+    toast.error(innerError.response.data || innerError.message);
   }
+
   return { data, error };
 };
 
-const RegisterForm: FC = () => {
+interface RegisterProps {
+  login: LoginFunc;
+  switchToLogin: () => void;
+}
+
+const RegisterForm: FC<RegisterProps> = ({ login, switchToLogin }) => {
   const [avatar, setAvatar] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [{ data, error }, submitAction, isPending] = useActionState<
     FormState,
     FormData
-  >((...args) => onSubmit(...args, avatar), {});
+  >((...args) => onSubmit(...args, avatar, login), {});
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAvatar(e.target.files && e.target.files[0]);
@@ -147,12 +156,17 @@ const RegisterForm: FC = () => {
           defaultValue={data?.confirmPassword}
           error={error?.confirmPassword}
         />
-        <button
-          type="submit"
-          className={classNames("actionButton", style.submit)}
-        >
-          Submit
-        </button>
+        <div className={style.buttonsContainer}>
+          <button
+            type="submit"
+            className={"actionButton"}
+          >
+            Submit
+          </button>
+          <button type="button" className={"actionButton"} onClick={switchToLogin}>
+            Log In
+          </button>
+        </div>
       </form>
     </div>
   );
