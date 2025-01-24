@@ -65,13 +65,15 @@ const onSubmit = async (
         email: data.email,
         password: data.password,
         avatarUrl: imageResponse.data.url,
-      });
+      }).request;
 
       return {};
     }
   } catch (error) {
-    toast.error((error as Error).message);
+    const innerError = error as {response: {data: string}, message: string}
+    toast.error(innerError.response.data || innerError.message);
   }
+  
   return { data, error };
 };
 

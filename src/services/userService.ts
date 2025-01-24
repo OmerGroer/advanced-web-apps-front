@@ -6,7 +6,7 @@ export interface User {
   avatarUrl: string;
 }
 
-export interface FullUser  extends Omit<User, "_id">{
+export interface FullUser extends Omit<User, "_id"> {
   email: string;
   password: string;
 }
@@ -35,8 +35,20 @@ const register = (user: FullUser) => {
     signal: abortController.signal,
   });
   return { request, abort: () => abortController.abort() };
-}
+};
+
+const login = (identifier: string, password: string) => {
+  const abortController = new AbortController();
+  const request = apiClient.post<User>(
+    `/auth/login`,
+    { username: identifier, email: identifier, password },
+    {
+      signal: abortController.signal,
+    }
+  );
+  return { request, abort: () => abortController.abort() };
+};
 
 const getLoggedUserId = () => "678b80972174b05bcaeabfe6";
 
-export default { getUserById, getLoggedUserId, register, uploadImg};
+export default { getUserById, getLoggedUserId, register, uploadImg, login };

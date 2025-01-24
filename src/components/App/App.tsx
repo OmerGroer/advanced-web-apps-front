@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar, { Endpoints } from "../Navbar/Navbar";
 import RegisterForm from "../RegisterForm/RegisterForm";
+import LoginForm from "../LoginForm/LoginForm";
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
         style={{ zIndex: "999999999999" }}
       />
       <div className={style.main}>
-        <RegisterForm />
+        <LoginForm />
+        {/* <RegisterForm /> */}
         {/* <Routes>
           {Endpoints.map((endpoint) => (
             <Route
