@@ -36,9 +36,10 @@ const onSubmit = async (
 interface LoginProps {
   login: LoginFunc;
   switchToRegister: () => void;
+  isLoading: boolean;
 }
 
-const LoginForm: FC<LoginProps> = ({ login, switchToRegister }) => {
+const LoginForm: FC<LoginProps> = ({ login, switchToRegister, isLoading }) => {
   const [data, submitAction, isPending] = useActionState<FormFields, FormData>(
     (...args) => onSubmit(...args, login),
     {}
@@ -46,7 +47,7 @@ const LoginForm: FC<LoginProps> = ({ login, switchToRegister }) => {
 
   return (
     <div className={style.container}>
-      {isPending && (
+      {(isPending || isLoading) && (
         <div className={style.spinner}>
           <CircularProgress />
         </div>

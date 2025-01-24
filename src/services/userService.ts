@@ -55,6 +55,18 @@ const login = (identifier: string, password: string) => {
   return { request, abort: () => abortController.abort() };
 };
 
+const refresh = (refreshToken: string) => {
+  const abortController = new AbortController();
+  const request = apiClient.post<LoginResponse>(
+    `/auth/refresh`,
+    { refreshToken },
+    {
+      signal: abortController.signal,
+    }
+  );
+  return { request, abort: () => abortController.abort() };
+};
+
 const getLoggedUserId = () => "678b80972174b05bcaeabfe6";
 
-export default { getUserById, getLoggedUserId, register, uploadImg, login };
+export default { getUserById, getLoggedUserId, register, uploadImg, login, refresh };
