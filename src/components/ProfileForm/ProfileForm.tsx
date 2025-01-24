@@ -23,9 +23,10 @@ const onSubmit = async (
   formData: FormData,
   avatar: File | null,
   user: User,
-  onClose: (wasUpdated: boolean) => void
+  onClose: (user?: User) => void
 ) => {
   const data: FormFields = Object.fromEntries(formData);
+  data.username = data.username?.trim();
 
   const error: FormFields = {};
 
@@ -33,23 +34,27 @@ const onSubmit = async (
 
   try {
     if (data.username) {
-      let avatarUrl = user.avatarUrl;
-      if (avatar) {
-        const imageResponse = await imageService.uploadImage(avatar);
-        avatarUrl = imageResponse.data.url;
+      if (avatar || data.username !== user.username) {
+        let avatarUrl = user.avatarUrl;
+        if (avatar) {
+          const imageResponse = await imageService.uploadImage(avatar);
+          avatarUrl = imageResponse.data.url;
+        }
+
+        const response = await userService.update({
+          _id: user._id,
+          username: data.username,
+          avatarUrl,
+        }).request;
+
+        if (avatarUrl !== user.avatarUrl) {
+          await imageService.deleteImage(user.avatarUrl);
+        }
+
+        onClose(response.data);
+      } else {
+        onClose();
       }
-
-      await userService.update({
-        _id: user._id,
-        username: data.username,
-        avatarUrl,
-      }).request;
-
-      if (avatarUrl !== user.avatarUrl) {
-        await imageService.deleteImage(user.avatarUrl);
-      }
-
-      onClose(true);
 
       return {};
     }
@@ -62,7 +67,7 @@ const onSubmit = async (
 };
 
 interface ProfileFormProps {
-  onClose: (wasUpdated: boolean) => void;
+  onClose: (user?: User) => void;
   user: User;
 }
 
@@ -90,7 +95,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ onClose, user }) => {
   };
 
   return createPortal(
-    <div className={style.backdrop} onClick={() => onClose(false)}>
+    <div className={style.backdrop} onClick={() => onClose()}>
       <div className={style.container} onClick={onModalClick}>
         {isPending && (
           <div className={style.spinner}>
@@ -131,7 +136,11 @@ const ProfileForm: FC<ProfileFormProps> = ({ onClose, user }) => {
             <button type="submit" className={"actionButton"}>
               Submit
             </button>
-            <button type="button" className={"actionButton"} onClick={() => onClose(false)}>
+            <button
+              type="button"
+              className={"actionButton"}
+              onClick={() => onClose()}
+            >
               Cancel
             </button>
           </div>

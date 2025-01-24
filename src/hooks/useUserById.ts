@@ -7,8 +7,8 @@ const useUserById = (userId: string | null) => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const fetchUser = () => {
-    if (!userId) return;
+  useEffect(() => {
+    if (!userId) return
     setIsLoading(true);
     const { request, abort } = userService.getUserById(userId);
     request
@@ -24,13 +24,9 @@ const useUserById = (userId: string | null) => {
       });
 
     return abort;
-  };
-
-  useEffect(() => {
-    return fetchUser();
   }, []);
 
-  return { user, error, isLoading, fetchUser };
+  return { user, setUser, error, isLoading };
 };
 
 export default useUserById;
