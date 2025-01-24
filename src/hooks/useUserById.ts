@@ -26,7 +26,7 @@ const useUserById = (userId: string | null) => {
     return abort;
   }, []);
 
-  return { user, error, isLoading };
+  return { user, setUser, error, isLoading };
 };
 
 export default useUserById;
