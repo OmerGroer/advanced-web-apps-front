@@ -1,4 +1,4 @@
-import apiClient from "./apiClient";
+import apiClient, { Page } from "./apiClient";
 import { User } from "./userService";
 
 export interface Comment {
@@ -10,7 +10,7 @@ export interface Comment {
 
 const getCommentsByPostId = (postId: string) => {
   const abortController = new AbortController();
-  const request = apiClient.get<Comment[]>(`/comments?postId=${postId}`, {
+  const request = apiClient.get<Page<Comment>>(`/comments?postId=${postId}`, {
     signal: abortController.signal,
   });
   return { request, abort: () => abortController.abort() };

@@ -12,7 +12,7 @@ const useCommentsByPostId = (postId: string) => {
     const { request, abort } = commentService.getCommentsByPostId(postId);
     request
       .then((res) => {
-        setComments(res.data);
+        setComments(res.data.data);
         setIsLoading(false);
       })
       .catch((error) => {

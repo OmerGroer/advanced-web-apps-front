@@ -14,7 +14,11 @@ const Profile: FC = () => {
   return (
     <>
       {user && <UserDetail style={style} user={user} />}
-      {isLoading && <CircularProgress />}
+      {isLoading && (
+        <div className={style.spinnerContainer}>
+          <CircularProgress />
+        </div>
+      )}
       <div className={style.postsContainer}>
         <PostsList userId={userService.getLoggedUserId()} />
       </div>
