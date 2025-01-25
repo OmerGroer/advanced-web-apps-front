@@ -4,9 +4,7 @@ import commentService, {
 } from "../../services/commentService";
 import style from "./Comment.module.css";
 import { toast } from "react-toastify";
-import UserDetail from "../UserDetails/UserDetails";
-import userService from "../../services/userService";
-import MenuContainer from "../MenuContainer/MenuContainer";
+import UserDetailWithMenu from "../UserDetails/UserDetailsWithMenu";
 
 interface CommentProps {
   comment: IComment;
@@ -35,16 +33,12 @@ const Comment: FC<CommentProps> = ({ comment, onDelete, onUpdate }) => {
 
   return (
     <>
-      <div className={style.userDetails}>
-        <UserDetail user={comment.sender} style={style} />
-        {comment.sender._id === userService.getLoggedUserId() && (
-          <MenuContainer
-            className={style.menu}
-            onDelete={onDeleteClick}
-            onUpdate={onUpdateClick}
-          />
-        )}
-      </div>
+      <UserDetailWithMenu
+        userDetailsStyle={style}
+        onDelete={onDeleteClick}
+        onUpdate={onUpdateClick}
+        user={comment.sender}
+      />
       <span>{comment.content}</span>
     </>
   );
