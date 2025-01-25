@@ -40,9 +40,11 @@ const CommentForm: FC<CommentFormProps> = ({ postId, onSubmit, ref }) => {
         };
 
         onSubmit(await submit(), commentId.current === null);
+        toast.success("Comment was uploaded successfully");
       } catch (error) {
+        console.error(error)
         const innerError = error as {response: {data: string}, message: string}
-        toast.error(innerError.response.data || innerError.message);
+        toast.error(innerError.response.data || "Problem has occured");
       }
       
       commentId.current = null;

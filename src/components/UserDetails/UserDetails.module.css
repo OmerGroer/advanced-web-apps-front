@@ -1,0 +1,10 @@
+.userDetails {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.userDetails>div {
+    display: flex;
+    flex-direction: row;
+}

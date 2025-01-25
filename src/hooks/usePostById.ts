@@ -25,7 +25,7 @@ const usePostById = (postId: string) => {
     return abort;
   }, []);
 
-  return { post, error, isLoading };
+  return { post, setPost, error, isLoading };
 };
 
 export default usePostById;

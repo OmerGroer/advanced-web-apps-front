@@ -1,14 +1,3 @@
-.userDetails {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.userDetails>div {
-    display: flex;
-    flex-direction: row;
-}
-
 .avatar {
     width: 1.5em;
     height: 1.5em;
@@ -20,8 +9,4 @@
     font-size: 1.2em;
     font-weight: bold;
     color: #091829;
-}
-
-.menu {
-    cursor: pointer;
 }

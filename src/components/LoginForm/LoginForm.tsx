@@ -26,8 +26,9 @@ const onSubmit = async (
       toast.error("Fill up the form");
     }
   } catch (error) {
+    console.error(error);
     const innerError = error as { response: { data: string }; message: string };
-    toast.error(innerError.response.data || innerError.message);
+    toast.error(innerError.response.data || "Problem has occured");
   }
 
   return data;
