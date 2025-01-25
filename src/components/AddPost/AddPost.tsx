@@ -8,13 +8,13 @@ import { createPortal } from "react-dom";
 import RestaurantImage from "../../assets/restaurant.png";
 import classNames from "classnames";
 import imageService from "../../services/imageService";
-import postService from "../../services/postService";
+import postService, { Post } from "../../services/postService";
 import { toast } from "react-toastify";
 
 interface FormFields {
   content?: string;
   image?: File | null;
-  rating?: number
+  rating?: number;
 }
 
 interface FormError extends Omit<FormFields, "image"> {
@@ -30,59 +30,90 @@ const onSubmit = async (
   _: FormState,
   formData: FormData,
   image: File | null,
-  restaurant: Restaurant,
-  onClose: () => void
+  onClose: (post?: Post) => void,
+  restaurant?: Restaurant,
+  post?: Post
 ) => {
   const data: FormFields = Object.fromEntries(formData);
-    data.image = image;
-    data.content = data.content?.trim();
-  
-    const error: FormError = {};
-  
-    if (!data.content) error.content = "Fill it up";
-    if (!data.image) error.image = "Upload an image";
-    
-    try {
-      if (
-        !Object.keys(error).length &&
-        data.image &&
-        data.content &&
-        data.rating
-      ) {
-        const imageResponse = await imageService.uploadImage(data.image);
-        await postService.createPost({
-          content: data.content,
-          imageUrl: imageResponse.data.url,
-          rating: data.rating,
-          restaurant: restaurant._id
-        }, restaurant).request;
+  data.content = data.content?.trim();
 
-        toast.success("Post was uploaded successfully")
-        onClose()
-  
-        return {};
+  const error: FormError = {};
+
+  if (!data.content) error.content = "Fill it up";
+  if (!data.image && !post) error.image = "Upload an image";
+
+  try {
+    if (!Object.keys(error).length && data.content && data.rating) {
+      let imageUrl = post?.imageUrl || "";
+      if (image) {
+        const imageResponse = await imageService.uploadImage(image);
+        imageUrl = imageResponse.data.url;
       }
-    } catch (error) {
-      const innerError = error as { response: { data: string }; message: string };
-      toast.error(innerError.response.data || innerError.message);
+
+      if (post) {
+        if (
+          imageUrl !== post.imageUrl ||
+          data.content !== post.content ||
+          data.rating !== post.rating
+        ) {
+          const response = await postService.updatePost(post._id, {
+            content: data.content,
+            imageUrl: imageUrl,
+            rating: data.rating,
+          }).request;
+
+          if (imageUrl !== post.imageUrl) {
+            await imageService.deleteImage(post.imageUrl);
+          }
+
+          onClose(response.data);
+        } else {
+          onClose();
+        }
+      } else if (restaurant) {
+        await postService.createPost(
+          {
+            content: data.content,
+            imageUrl: imageUrl,
+            rating: data.rating,
+            restaurant: restaurant._id,
+          },
+          restaurant
+        ).request;
+
+        toast.success("Post was uploaded successfully");
+        onClose();
+      }
+
+      return {};
     }
-  
-    return { data, error };
+  } catch (error) {
+    const innerError = error as { response: { data: string }; message: string };
+    toast.error(innerError.response.data || innerError.message);
+  }
+
+  return { data, error };
 };
 
 interface AddPostProps {
-  restaurant: Restaurant;
-  onClose: () => void;
+  restaurant?: Restaurant;
+  post?: Post;
+  onClose: (post?: Post) => void;
 }
 
-const AddPost: FC<AddPostProps> = ({ restaurant, onClose }) => {
+const AddPost: FC<AddPostProps> = ({ restaurant, onClose, post }) => {
   const [image, setImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [{ data, error }, submitAction, isPending] = useActionState<
     FormState,
     FormData
-  >((...args) => onSubmit(...args, image, restaurant, onClose), {});
+  >((...args) => onSubmit(...args, image, onClose, restaurant, post), {
+    data: {
+      content: post?.content || "",
+      rating: post?.rating || 5,
+    },
+  });
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     setImage(e.target.files && e.target.files[0]);
@@ -98,7 +129,7 @@ const AddPost: FC<AddPostProps> = ({ restaurant, onClose }) => {
         <span
           style={{ color: "black", fontSize: "1em" }}
           className={style.x}
-          onClick={onClose}
+          onClick={() => onClose()}
         >
           ×
         </span>
@@ -107,10 +138,16 @@ const AddPost: FC<AddPostProps> = ({ restaurant, onClose }) => {
             <CircularProgress />
           </div>
         )}
-        <h1>{restaurant.name}</h1>
+        <h1>{restaurant?.name || post?.restaurant.name}</h1>
         <form action={submitAction} className={style.form}>
           <img
-            src={image ? URL.createObjectURL(image) : RestaurantImage}
+            src={
+              image
+                ? URL.createObjectURL(image)
+                : post
+                ? `${import.meta.env.VITE_SERVER_URL}${post.imageUrl}`
+                : RestaurantImage
+            }
             className={style.image}
             alt="preview"
           />
@@ -129,14 +166,22 @@ const AddPost: FC<AddPostProps> = ({ restaurant, onClose }) => {
           />
           {error?.image && <span className={style.error}>{error?.image}</span>}
 
-          <Rating name="rating" defaultValue={5} precision={1} size="large" className={style.rating} />
+          <Rating
+            name="rating"
+            defaultValue={data?.rating}
+            precision={1}
+            size="large"
+            className={style.rating}
+          />
 
           <textarea
             name="content"
             placeholder="What are you saying?"
             defaultValue={data?.content}
           />
-          {error?.content && <span className={style.error}>{error?.content}</span>}
+          {error?.content && (
+            <span className={style.error}>{error?.content}</span>
+          )}
 
           <button
             type="submit"

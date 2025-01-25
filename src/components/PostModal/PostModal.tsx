@@ -13,7 +13,7 @@ interface PostModalProps {
 }
 
 const PostModal: FC<PostModalProps> = ({ postId, onClose }) => {
-  const { post, error, isLoading } = usePostById(postId);
+  const { post, setPost, error, isLoading } = usePostById(postId);
 
   useToastError(error);
 
@@ -28,7 +28,8 @@ const PostModal: FC<PostModalProps> = ({ postId, onClose }) => {
           ×
         </span>
         <div className={style.postContainer}>
-          {post && <Post post={post!} />} {isLoading && <CircularProgress />}
+          {post && <Post post={post!} onEdit={(post) => setPost(post)} />}
+          {isLoading && <CircularProgress />}
         </div>
         <div>
           <CommentsList postId={postId} />
