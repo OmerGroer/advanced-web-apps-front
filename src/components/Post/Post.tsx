@@ -8,6 +8,7 @@ import AddPost from "../AddPost/AddPost";
 import { toast } from "react-toastify";
 import userService from "../../services/userService";
 import MenuContainer from "../MenuContainer/MenuContainer";
+import { Rating } from "@mui/material";
 
 interface PostProps {
   post: IPost;
@@ -64,9 +65,7 @@ const Post: FC<PostProps> = ({
       <div className={style.restaurantContainer}>
         <div>
           <span className={style.restaurantName}>{post.restaurant.name}</span>
-          {Array.from({ length: post.rating }).map((_, index) => (
-            <img key={index} src={starImg} alt="star" className={style.star} />
-          ))}
+          <Rating name="rating" defaultValue={post.rating} precision={1} size="large" readOnly />
         </div>
 
         {withoutUser && post.sender._id === userService.getLoggedUserId() && (
