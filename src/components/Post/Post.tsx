@@ -1,7 +1,6 @@
-import { FC, useState } from "react";
+import { FC, useState, useTransition } from "react";
 import style from "./Post.module.css";
 import postService, { Post as IPost } from "../../services/postService";
-import starImg from "../../assets/star_on.png";
 import Image from "../Image/Image";
 import UserDetailWithMenu from "../UserDetails/UserDetailsWithMenu";
 import AddPost from "../AddPost/AddPost";
@@ -9,6 +8,7 @@ import { toast } from "react-toastify";
 import userService from "../../services/userService";
 import MenuContainer from "../MenuContainer/MenuContainer";
 import { Rating } from "@mui/material";
+import classNames from "classnames";
 
 interface PostProps {
   post: IPost;
@@ -25,6 +25,7 @@ const Post: FC<PostProps> = ({
   onEdit,
   onDelete,
 }) => {
+  const [isPending, startTransition] = useTransition();
   const [isEdit, setEdit] = useState<boolean>(false);
 
   const onUpdateClick = (close: () => void) => {
@@ -33,18 +34,18 @@ const Post: FC<PostProps> = ({
   };
 
   const onDeleteClick = (close: () => void) => {
-    postService
-      .deletePost(post._id)
-      .request.then(() => {
-        close();
+    startTransition(async () => {
+      try {
+        await postService.deletePost(post._id).request;
         toast.success("Post was deleted successfully");
         onDelete(post._id);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(error);
         toast.error("Problem has occured");
+      } finally {
         close();
-      });
+      }
+    });
   };
 
   const onEditClose = (post?: IPost) => {
@@ -53,9 +54,10 @@ const Post: FC<PostProps> = ({
   };
 
   return (
-    <div key={post._id} className={style.post}>
+    <div key={post._id} className={classNames(style.post, {[style.deleted]: isPending})}>
       {!withoutUser && (
         <UserDetailWithMenu
+          disabled={isPending}
           userDetailsStyle={style}
           onDelete={onDeleteClick}
           onUpdate={onUpdateClick}
@@ -65,11 +67,21 @@ const Post: FC<PostProps> = ({
       <div className={style.restaurantContainer}>
         <div>
           <span className={style.restaurantName}>{post.restaurant.name}</span>
-          <Rating name="rating" defaultValue={post.rating} precision={1} size="large" readOnly />
+          <Rating
+            name="rating"
+            defaultValue={post.rating}
+            precision={1}
+            size="large"
+            readOnly
+          />
         </div>
 
         {withoutUser && post.sender._id === userService.getLoggedUserId() && (
-          <MenuContainer onDelete={onDeleteClick} onUpdate={onUpdateClick} />
+          <MenuContainer
+            disabled={isPending}
+            onDelete={onDeleteClick}
+            onUpdate={onUpdateClick}
+          />
         )}
       </div>
       <p className={style.content}>{post.content}</p>

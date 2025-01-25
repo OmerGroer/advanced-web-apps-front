@@ -7,6 +7,10 @@
     border-bottom: #748CAB 1px solid;
 }
 
+.post.deleted {
+    opacity: .5;
+}
+
 .userDetails {
     display: flex;
     flex-direction: row;

@@ -1,8 +1,6 @@
-import { ChangeEvent, FC, useActionState, useRef, useState } from "react";
+import { FC, useActionState, useRef } from "react";
 import style from "./AddPost.module.css";
 import { Restaurant } from "../../hooks/useRestaurants";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { CircularProgress, Rating } from "@mui/material";
 import { createPortal } from "react-dom";
 import RestaurantImage from "../../assets/restaurant.png";
@@ -10,6 +8,7 @@ import classNames from "classnames";
 import imageService from "../../services/imageService";
 import postService, { Post } from "../../services/postService";
 import { toast } from "react-toastify";
+import ImageInput, { ImageInputHandle } from "../Inputs/ImageInput";
 
 interface FormFields {
   content?: string;
@@ -29,8 +28,8 @@ interface FormState {
 const onSubmit = async (
   _: FormState,
   formData: FormData,
-  image: File | null,
   onClose: (post?: Post) => void,
+  image: File | null | undefined,
   restaurant?: Restaurant,
   post?: Post
 ) => {
@@ -90,7 +89,7 @@ const onSubmit = async (
       return {};
     }
   } catch (error) {
-    console.error(error)
+    console.error(error);
     const innerError = error as { response: { data: string }; message: string };
     toast.error(innerError.response.data || "Problem has occured");
   }
@@ -105,26 +104,16 @@ interface AddPostProps {
 }
 
 const AddPost: FC<AddPostProps> = ({ restaurant, onClose, post }) => {
-  const [image, setImage] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const imageInputRef = useRef<ImageInputHandle>(null);
   const [{ data, error }, submitAction, isPending] = useActionState<
     FormState,
     FormData
-  >((...args) => onSubmit(...args, image, onClose, restaurant, post), {
+  >((...args) => onSubmit(...args, onClose, imageInputRef.current?.getImage(), restaurant, post), {
     data: {
       content: post?.content || "",
       rating: post?.rating || 5,
     },
   });
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setImage(e.target.files && e.target.files[0]);
-  };
-
-  const handleImageClick = () => {
-    fileInputRef.current?.click();
-  };
 
   return createPortal(
     <div className={style.backdrop}>
@@ -143,29 +132,14 @@ const AddPost: FC<AddPostProps> = ({ restaurant, onClose, post }) => {
         )}
         <h1>{restaurant?.name || post?.restaurant.name}</h1>
         <form action={submitAction} className={style.form}>
-          <img
-            src={
-              image
-                ? URL.createObjectURL(image)
-                : post
+          <ImageInput
+            ref={imageInputRef}
+            style={style}
+            defaultImage={
+              post
                 ? `${import.meta.env.VITE_SERVER_URL}${post.imageUrl}`
                 : RestaurantImage
             }
-            className={style.image}
-            alt="preview"
-          />
-          <FontAwesomeIcon
-            icon={faImage}
-            onClick={handleImageClick}
-            className={style.imageIcon}
-          />
-          <input
-            type="file"
-            onChange={handleFileChange}
-            accept="image/png, image/jpeg"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            name="image"
           />
           {error?.image && <span className={style.error}>{error?.image}</span>}
 

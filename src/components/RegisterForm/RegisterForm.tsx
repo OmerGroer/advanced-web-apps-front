@@ -1,14 +1,13 @@
-import { ChangeEvent, FC, useActionState, useRef, useState } from "react";
+import { FC, useActionState, useRef } from "react";
 import style from "./RegisterForm.module.css";
 import avatarImage from "../../assets/avatar.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
-import Input from "../Input/Input";
+import Input from "../Inputs/Input";
 import userService from "../../services/userService";
 import { CircularProgress } from "@mui/material";
 import { LoginFunc } from "../LoginContainer/LoginContainer";
 import imageService from "../../services/imageService";
+import ImageInput, { ImageInputHandle } from "../Inputs/ImageInput";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
@@ -33,8 +32,8 @@ interface FormState {
 const onSubmit = async (
   _: FormState,
   formData: FormData,
-  avatar: File | null,
-  login: LoginFunc
+  login: LoginFunc,
+  avatar: File | null | undefined
 ) => {
   const data: FormFields = Object.fromEntries(formData);
   data.avatar = avatar;
@@ -87,20 +86,14 @@ interface RegisterProps {
 }
 
 const RegisterForm: FC<RegisterProps> = ({ login, switchToLogin }) => {
-  const [avatar, setAvatar] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<ImageInputHandle>(null);
   const [{ data, error }, submitAction, isPending] = useActionState<
     FormState,
     FormData
-  >((...args) => onSubmit(...args, avatar, login), {});
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAvatar(e.target.files && e.target.files[0]);
-  };
-
-  const handleImageClick = () => {
-    fileInputRef.current?.click();
-  };
+  >(
+    (...args) => onSubmit(...args, login, imageInputRef.current?.getImage()),
+    {}
+  );
 
   return (
     <div className={style.container}>
@@ -111,25 +104,13 @@ const RegisterForm: FC<RegisterProps> = ({ login, switchToLogin }) => {
       )}
       <h1>Registration Form</h1>
       <form action={submitAction} className={style.form}>
-        <img
-          src={avatar ? URL.createObjectURL(avatar) : avatarImage}
-          className={style.image}
-          alt="preview"
-        />
-        <FontAwesomeIcon
-          icon={faImage}
-          onClick={handleImageClick}
-          className={style.imageIcon}
-        />
-        <input
-          type="file"
-          onChange={handleFileChange}
-          accept="image/png, image/jpeg"
-          ref={fileInputRef}
-          style={{ display: "none" }}
-          name="avatar"
+        <ImageInput
+          ref={imageInputRef}
+          style={style}
+          defaultImage={avatarImage}
         />
         {error?.avatar && <span>{error?.avatar}</span>}
+
         <Input
           label="User name"
           type="text"
@@ -159,13 +140,14 @@ const RegisterForm: FC<RegisterProps> = ({ login, switchToLogin }) => {
           error={error?.confirmPassword}
         />
         <div className={style.buttonsContainer}>
-          <button
-            type="submit"
-            className={"actionButton"}
-          >
+          <button type="submit" className={"actionButton"}>
             Submit
           </button>
-          <button type="button" className={"actionButton"} onClick={switchToLogin}>
+          <button
+            type="button"
+            className={"actionButton"}
+            onClick={switchToLogin}
+          >
             Log In
           </button>
         </div>

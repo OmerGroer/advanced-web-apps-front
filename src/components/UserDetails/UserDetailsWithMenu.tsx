@@ -9,6 +9,7 @@ interface UserDetailsMenuProps {
   onUpdate: (close: () => void) => void;
   user: User;
   userDetailsStyle: CSSModuleClasses;
+  disabled?: boolean;
 }
 
 const UserDetailWithMenu: FC<UserDetailsMenuProps> = ({
@@ -16,12 +17,14 @@ const UserDetailWithMenu: FC<UserDetailsMenuProps> = ({
   onDelete,
   onUpdate,
   userDetailsStyle,
+  disabled = false,
 }) => {
   return (
     <div className={style.userDetails}>
       <UserDetail user={user} style={userDetailsStyle} />
       {user._id === userService.getLoggedUserId() && (
         <MenuContainer
+          disabled={disabled}
           onDelete={onDelete}
           onUpdate={onUpdate}
         />

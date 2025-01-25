@@ -56,7 +56,7 @@ const CommentForm: FC<CommentFormProps> = ({ postId, onSubmit, ref }) => {
   useImperativeHandle(
     ref,
     (): CommentFormHandle => ({
-      updateComment: (comment: Comment) => {
+      updateComment(comment: Comment) {
         commentId.current = comment._id
         if (inputRef.current !== null) inputRef.current.value = comment.content
       },

@@ -1,13 +1,12 @@
-import { ChangeEvent, FC, useActionState, useRef, useState } from "react";
+import { FC, useActionState, useRef } from "react";
 import style from "./ProfileForm.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
-import Input from "../Input/Input";
+import Input from "../Inputs/Input";
 import { CircularProgress } from "@mui/material";
 import { createPortal } from "react-dom";
 import userService, { User } from "../../services/userService";
 import imageService from "../../services/imageService";
+import ImageInput, { ImageInputHandle } from "../Inputs/ImageInput";
 
 interface FormFields {
   username?: string;
@@ -21,7 +20,7 @@ interface FormState {
 const onSubmit = async (
   _: FormState,
   formData: FormData,
-  avatar: File | null,
+  avatar: File | null | undefined,
   user: User,
   onClose: (user?: User) => void
 ) => {
@@ -73,23 +72,18 @@ interface ProfileFormProps {
 }
 
 const ProfileForm: FC<ProfileFormProps> = ({ onClose, user }) => {
-  const [avatar, setAvatar] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<ImageInputHandle>(null);
 
   const [{ data, error }, submitAction, isPending] = useActionState<
     FormState,
     FormData
-  >((...args) => onSubmit(...args, avatar, user, onClose), {
-    data: { username: user.username },
-  });
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAvatar(e.target.files && e.target.files[0]);
-  };
-
-  const handleImageClick = () => {
-    fileInputRef.current?.click();
-  };
+  >(
+    (...args) =>
+      onSubmit(...args, imageInputRef.current?.getImage(), user, onClose),
+    {
+      data: { username: user.username },
+    }
+  );
 
   const onModalClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
@@ -104,27 +98,10 @@ const ProfileForm: FC<ProfileFormProps> = ({ onClose, user }) => {
           </div>
         )}
         <form action={submitAction} className={style.form}>
-          <img
-            src={
-              avatar
-                ? URL.createObjectURL(avatar)
-                : `${import.meta.env.VITE_SERVER_URL}${user.avatarUrl}`
-            }
-            className={style.image}
-            alt="preview"
-          />
-          <FontAwesomeIcon
-            icon={faImage}
-            onClick={handleImageClick}
-            className={style.imageIcon}
-          />
-          <input
-            type="file"
-            onChange={handleFileChange}
-            accept="image/png, image/jpeg"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            name="avatar"
+          <ImageInput
+            ref={imageInputRef}
+            style={style}
+            defaultImage={`${import.meta.env.VITE_SERVER_URL}${user.avatarUrl}`}
           />
           <Input
             label="User name"
