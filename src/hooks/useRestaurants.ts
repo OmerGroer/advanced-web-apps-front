@@ -52,7 +52,7 @@ const useRestaurants = () => {
           name: restaurant.name,
           address: restaurant.address.fullAddress,
           category: restaurant.cuisines?.join("/"),
-          priceTypes: restaurant.priceTypes,
+          priceTypes: ` ${restaurant.priceTypes} `,
         }));
 
         setRestaurants((prevRestaurants) =>

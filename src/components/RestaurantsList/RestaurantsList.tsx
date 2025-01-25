@@ -5,6 +5,7 @@ import useToastError from "../../hooks/useToastError";
 import useScroll from "../../hooks/useScroll";
 import { CircularProgress } from "@mui/material";
 import RestaurantSearch from "../RestaurantSearch/RestaurantSearch";
+import AddPost from "../AddPost/AddPost";
 
 const RestaurantsList: FC = () => {
   const [selectedRestaurant, setSelectedResstaurant] = useState<Restaurant | null>(null)
@@ -19,98 +20,11 @@ const RestaurantsList: FC = () => {
   const listRef = useScroll<HTMLDivElement>(loadMoreRestaurants);
   useToastError(error);
 
-  const a = [
-    {
-      _id: "123",
-      name: "Omer",
-      address: "there",
-      category: "tasty",
-      priceTypes: "$$$",
-    },
-    {
-      _id: "14523",
-      name: "Omsdfer",
-      address: "thesdfre",
-      category: "tasty",
-      priceTypes: "$$$",
-    },
-    {
-      _id: "14523",
-      name: "Omsdfer",
-      address: "thesdfre",
-      category: "tasty",
-      priceTypes: "$$$",
-    },
-    {
-      _id: "14523",
-      name: "Omsdfer",
-      address: "thesdfre",
-      category: "tasty",
-      priceTypes: "$$$",
-    },
-    {
-      _id: "14523",
-      name: "Omsdfer",
-      address: "thesdfre",
-      category: "tasty",
-      priceTypes: "$$$",
-    },
-    {
-      _id: "14523",
-      name: "Omsdfer",
-      address: "thesdfre",
-      category: "tasty",
-      priceTypes: "$$$",
-    },
-    {
-      _id: "14523",
-      name: "Omsdfer",
-      address: "thesdfre",
-      category: "tasty",
-      priceTypes: "$$$",
-    },
-    {
-      _id: "14523",
-      name: "Omsdfer",
-      address: "thesdfre",
-      category: "tasty",
-      priceTypes: "$$$",
-    },
-    {
-      _id: "14523",
-      name: "Omsdfer",
-      address: "thesdfre",
-      category: "tasty",
-      priceTypes: "$$$",
-    },
-    {
-      _id: "14523",
-      name: "Omsdfer",
-      address: "thesdfre",
-      category: "tasty",
-      priceTypes: "$$$",
-    },
-    {
-      _id: "14523",
-      name: "Omsdfer",
-      address: "thesdfre",
-      category: "tasty",
-      priceTypes: "$$$",
-    },
-    {
-      _id: "14523",
-      name: "Omsdfer",
-      address: "thesdfre",
-      category: "tasty",
-      priceTypes: "$$$",
-    },
-  ];
-
   return (
     <>
       <RestaurantSearch onSubmit={(location) => searchRestaurants(location)} />
       <div className={style.restaurantsList} ref={listRef}>
-        {a.map((restaurant) => (
+        {restaurants.map((restaurant) => (
           <div key={restaurant._id} className={style.row} onClick={() => setSelectedResstaurant(restaurant)}>
             <span style={{fontWeight: "bold"}}>{restaurant.name}</span>
             <span style={{fontSize: ".8em"}}>{restaurant.category ? `${restaurant.category} - `: ""}{restaurant.address}</span>
@@ -129,6 +43,7 @@ const RestaurantsList: FC = () => {
           location !== "" && <p>There is no restaurants</p>
         )}
       </div>
+      {selectedRestaurant && <AddPost onClose={() => setSelectedResstaurant(null)} restaurant={selectedRestaurant} />}
     </>
   );
 };
