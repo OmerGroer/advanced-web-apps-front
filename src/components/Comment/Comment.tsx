@@ -1,13 +1,12 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import commentService, {
   Comment as IComment,
 } from "../../services/commentService";
 import style from "./Comment.module.css";
-import { Menu, MenuItem } from "@mui/material";
-import MenuImage from "../../assets/menu.svg";
 import { toast } from "react-toastify";
 import UserDetail from "../UserDetails/UserDetails";
 import userService from "../../services/userService";
+import MenuContainer from "../MenuContainer/MenuContainer";
 
 interface CommentProps {
   comment: IComment;
@@ -16,62 +15,37 @@ interface CommentProps {
 }
 
 const Comment: FC<CommentProps> = ({ comment, onDelete, onUpdate }) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event: React.MouseEvent<HTMLImageElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const onDeleteClick = () => {
+  const onDeleteClick = (close: () => void) => {
     commentService
       .deleteComment(comment._id)
       .then(() => {
-        setAnchorEl(null);
-        onDelete(comment._id)
+        close();
+        onDelete(comment._id);
       })
       .catch((error) => {
         toast.error(error.message);
-        setAnchorEl(null);
+        close();
       });
   };
 
-  const onUpdateClick = () => {
-    onUpdate(comment)
-    setAnchorEl(null);
-
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null);
+  const onUpdateClick = (close: () => void) => {
+    onUpdate(comment);
+    close();
   };
 
   return (
     <>
       <div className={style.userDetails}>
-      <UserDetail user={comment.sender} style={style} />
+        <UserDetail user={comment.sender} style={style} />
         {comment.sender._id === userService.getLoggedUserId() && (
-          <img
-            src={MenuImage}
-            alt="menu"
-            onClick={handleClick}
+          <MenuContainer
             className={style.menu}
+            onDelete={onDeleteClick}
+            onUpdate={onUpdateClick}
           />
         )}
       </div>
       <span>{comment.content}</span>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-      >
-        <MenuItem onClick={onUpdateClick}>Edit</MenuItem>
-        <MenuItem onClick={onDeleteClick}>Delete</MenuItem>
-      </Menu>
     </>
   );
 };
