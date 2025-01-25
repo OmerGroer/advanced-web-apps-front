@@ -3,7 +3,7 @@ import style from "./CommentsList.module.css";
 import { CircularProgress } from "@mui/material";
 import Comment from "../Comment/Comment";
 import useCommentsByPostId from "../../hooks/useCommentsByPostId";
-import useToastError from "../../hooks/useRoastError";
+import useToastError from "../../hooks/useToastError";
 import { Comment as IComment } from "../../services/commentService";
 import CommentForm, { CommentFormHandle } from "../CommentForm/CommentForm";
 
