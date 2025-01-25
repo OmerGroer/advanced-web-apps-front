@@ -49,3 +49,7 @@
     height: auto;
     object-fit: contain;
 }
+
+.rating {
+    align-self: baseline;
+}

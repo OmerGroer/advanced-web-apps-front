@@ -1,9 +1,9 @@
 import { FC } from "react";
 import style from "./Post.module.css";
 import { Post as IPost } from "../../services/postService";
-import starImg from "../../assets/star_on.png";
 import UserDetail from "../UserDetails/UserDetails";
 import Image from "../Image/Image";
+import { Rating } from "@mui/material";
 
 interface PostProps {
   post: IPost;
@@ -17,9 +17,7 @@ const Post: FC<PostProps> = ({ post, children, withoutUser = false }) => {
       {!withoutUser && <UserDetail user={post.sender} style={style} />}
       <div>
         <span className={style.restaurantName}>{post.restaurant.name}</span>
-        {Array.from({ length: post.rating }).map((_, index) => (
-          <img key={index} src={starImg} alt="star" className={style.star} />
-        ))}
+        <Rating name="rating" defaultValue={post.rating} precision={1} size="large" className={style.rating} readOnly />
       </div>
       <p className={style.content}>{post.content}</p>
       <Image
