@@ -18,10 +18,12 @@ const Comment: FC<CommentProps> = ({ comment, onDelete, onUpdate }) => {
       .deleteComment(comment._id)
       .then(() => {
         close();
+        toast.success("Comment was deleted successfully");
         onDelete(comment._id);
       })
       .catch((error) => {
-        toast.error(error.message);
+        console.error(error)
+        toast.error("Problem has occured");
         close();
       });
   };

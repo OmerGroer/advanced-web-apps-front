@@ -1,6 +1,7 @@
 import { FC, useActionState } from "react";
 import style from "./RestaurantSearch.module.css";
 import classNames from "classnames";
+import { toast } from "react-toastify";
 
 interface RestaurantSearchProps {
   onSubmit: (location: string) => void;
@@ -12,6 +13,8 @@ const RestaurantSearch: FC<RestaurantSearchProps> = ({ onSubmit }) => {
     FormData
   >(async (prevLocation, formData) => {
     const data = Object.fromEntries(formData);
+
+    if (!data.location) toast.error("Search is empty")
 
     if (typeof data.location === "string") {
       if (prevLocation !== data.location) onSubmit(data.location);

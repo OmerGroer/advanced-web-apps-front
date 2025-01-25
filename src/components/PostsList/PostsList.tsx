@@ -28,11 +28,12 @@ const PostsList: FC<PostsListProps> = ({ userId }) => {
         prevPosts.map((oldPost) => (oldPost._id !== postId ? oldPost : newPost))
       );
     } catch (error) {
+      console.error(error);
       const innerError = error as {
         response: { data: string };
         message: string;
       };
-      toast.error(innerError.response.data || innerError.message);
+      toast.error(innerError.response.data || "Problem has occured");
     }
   };
 
@@ -44,11 +45,12 @@ const PostsList: FC<PostsListProps> = ({ userId }) => {
         await likeService.like(post._id);
       }
     } catch (error) {
+      console.log(error);
       const innerError = error as {
         response: { data: string };
         message: string;
       };
-      toast.error(innerError.response.data || innerError.message);
+      toast.error(innerError.response.data || "Problem has occured");
     } finally {
       await refershPost(post._id);
     }
@@ -60,9 +62,19 @@ const PostsList: FC<PostsListProps> = ({ userId }) => {
     );
   };
 
-  const onCloseModal = () => {
+  const deletePost = (postId: string) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+  };
+
+  const onCloseModal = (wasDeleted: boolean) => {
     setSelectedPostId((prevId) => {
-      if (prevId !== null) refershPost(prevId);
+      if (prevId !== null) {
+        if (wasDeleted) {
+          deletePost(prevId);
+        } else {
+          refershPost(prevId);
+        }
+      }
       return null;
     });
   };
@@ -75,6 +87,7 @@ const PostsList: FC<PostsListProps> = ({ userId }) => {
           post={post}
           withoutUser={!!userId}
           onEdit={updatePost}
+          onDelete={deletePost}
         >
           <div>
             <button

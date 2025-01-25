@@ -22,7 +22,6 @@ const UserDetailWithMenu: FC<UserDetailsMenuProps> = ({
       <UserDetail user={user} style={userDetailsStyle} />
       {user._id === userService.getLoggedUserId() && (
         <MenuContainer
-          className={style.menu}
           onDelete={onDelete}
           onUpdate={onUpdate}
         />
