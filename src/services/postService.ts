@@ -1,18 +1,23 @@
+import { Restaurant } from "../hooks/useRestaurants";
 import apiClient, { Page } from "./apiClient";
 import { User } from "./userService";
 
-export interface Post {
+export interface Post extends Omit<NewPost, "restaurant"> {
   _id: string;
-  content: string;
   restaurant: {
     _id: string;
     name: string;
   };
-  rating: number;
-  imageUrl: string;
   isLiked: boolean;
   numberOfComments: number;
   sender: User;
+}
+
+interface NewPost {
+  content: string;
+  restaurant: string;
+  rating: number;
+  imageUrl: string;
 }
 
 const getAllPosts = (times: {min?: string, max?: string}, userId?: string) => {
@@ -36,4 +41,13 @@ const getPostById = (postId: string) => {
   return { request, abort: () => abortController.abort() };
 };
 
-export default { getAllPosts, getPostById };
+const createPost = (post: NewPost, restaurant: Omit<Restaurant, "_id">) => {
+  const abortController = new AbortController();
+  const request = apiClient.post<Post>(`/posts`, {
+    post,
+    restaurant,
+  });
+  return { request, abort: () => abortController.abort() };
+};
+
+export default { getAllPosts, getPostById, createPost };

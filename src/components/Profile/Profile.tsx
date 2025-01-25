@@ -5,7 +5,7 @@ import UserDetail from "../UserDetails/UserDetails";
 import useUserById from "../../hooks/useUserById";
 import userService, { User } from "../../services/userService";
 import { CircularProgress } from "@mui/material";
-import useToastError from "../../hooks/useRoastError";
+import useToastError from "../../hooks/useToastError";
 import ProfileForm from "../ProfileForm/ProfileForm";
 
 const Profile: FC = () => {

@@ -8,6 +8,7 @@ const usePosts = (userId?: string) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const times = useRef<{ min?: string; max?: string }>({});
   const isLoadingRef = useRef<boolean>(false);
+  const abotFunctionRef = useRef<() => void>(null);
 
   const fetchPosts = () => {
     if (isLoadingRef.current) return;
@@ -30,12 +31,16 @@ const usePosts = (userId?: string) => {
         isLoadingRef.current = false;
       });
 
-    return abort;
+      abotFunctionRef.current = abort;
   };
 
   useEffect(() => {
     isLoadingRef.current = false;
-    return fetchPosts();
+    fetchPosts();
+
+    return () => {
+      if (abotFunctionRef.current) abotFunctionRef.current();
+    };
   }, []);
 
   return { posts, setPosts, fetchPosts, error, isLoading };

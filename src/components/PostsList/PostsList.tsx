@@ -4,7 +4,7 @@ import usePosts from "../../hooks/usePosts";
 import { CircularProgress } from "@mui/material";
 import PostModal from "../PostModal/PostModal";
 import Post from "../Post/Post";
-import useToastError from "../../hooks/useRoastError";
+import useToastError from "../../hooks/useToastError";
 import postService, { Post as IPost } from "../../services/postService";
 import likeService from "../../services/likeService";
 import { toast } from "react-toastify";
@@ -80,7 +80,7 @@ const PostsList: FC<PostsListProps> = ({ userId }) => {
           </div>
         ) : (
           <CircularProgress />
-        )) : ((posts.length === 0) && <p>There is not posts yet</p>)}
+        )) : ((posts.length === 0) && <p>There is no posts yet</p>)}
       {selectedPostId && (
         <PostModal postId={selectedPostId} onClose={onCloseModal} />
       )}

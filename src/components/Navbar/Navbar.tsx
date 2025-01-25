@@ -5,6 +5,7 @@ import { NavLink } from "react-router";
 import classNames from "classnames";
 import Profile from "../Profile/Profile";
 import userService from "../../services/userService";
+import RestaurantsList from "../RestaurantsList/RestaurantsList";
 
 interface Endpoint {
   name: string;
@@ -21,7 +22,7 @@ export const Endpoints: Endpoint[] = [
   {
     name: "New",
     path: "/new",
-    element: <Feed />,
+    element: <RestaurantsList />,
   },
   {
     name: "Profile",

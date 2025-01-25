@@ -5,7 +5,7 @@ import usePostById from "../../hooks/usePostById";
 import Post from "../Post/Post";
 import { CircularProgress } from "@mui/material";
 import CommentsList from "../CommentsList/CommentsList";
-import useToastError from "../../hooks/useRoastError";
+import useToastError from "../../hooks/useToastError";
 
 interface PostModalProps {
   postId: string;
