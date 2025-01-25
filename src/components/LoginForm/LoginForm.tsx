@@ -1,7 +1,7 @@
 import { FC, useActionState } from "react";
 import style from "./LoginForm.module.css";
 import { toast } from "react-toastify";
-import Input from "../Input/Input";
+import Input from "../Inputs/Input";
 import { CircularProgress } from "@mui/material";
 import { LoginFunc } from "../LoginContainer/LoginContainer";
 

@@ -5,11 +5,13 @@ import MenuImage from "../../assets/menu.svg";
 interface MenuContainerProps {
   onDelete: (close: () => void) => void;
   onUpdate: (close: () => void) => void;
+  disabled?: boolean;
 }
 
 const MenuContainer: FC<MenuContainerProps> = ({
   onDelete,
-  onUpdate
+  onUpdate,
+  disabled = false
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -19,7 +21,7 @@ const MenuContainer: FC<MenuContainerProps> = ({
   };
 
   const handleClick = (event: React.MouseEvent<HTMLImageElement>) => {
-    setAnchorEl(event.currentTarget);
+    if (!disabled) setAnchorEl(event.currentTarget);
   };
 
   return (
@@ -28,7 +30,7 @@ const MenuContainer: FC<MenuContainerProps> = ({
         src={MenuImage}
         alt="menu"
         onClick={handleClick}
-        style={{cursor: "pointer"}}
+        style={{cursor: disabled ? "auto" : "pointer"}}
       />
       <Menu
         id="basic-menu"

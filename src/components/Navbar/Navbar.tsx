@@ -1,11 +1,11 @@
 import { FC, ReactNode } from "react";
 import style from "./Navbar.module.css";
-import Feed from "../Feed/Feed";
 import { NavLink } from "react-router";
 import classNames from "classnames";
 import Profile from "../Profile/Profile";
 import userService from "../../services/userService";
 import RestaurantsList from "../RestaurantsList/RestaurantsList";
+import PostsList from "../PostsList/PostsList";
 
 interface Endpoint {
   name: string;
@@ -17,7 +17,7 @@ export const Endpoints: Endpoint[] = [
   {
     name: "Feed",
     path: "/",
-    element: <Feed />,
+    element: <PostsList />,
   },
   {
     name: "New",
