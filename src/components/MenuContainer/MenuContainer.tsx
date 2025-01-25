@@ -5,13 +5,11 @@ import MenuImage from "../../assets/menu.svg";
 interface MenuContainerProps {
   onDelete: (close: () => void) => void;
   onUpdate: (close: () => void) => void;
-  className: string;
 }
 
 const MenuContainer: FC<MenuContainerProps> = ({
   onDelete,
-  onUpdate,
-  className,
+  onUpdate
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -30,7 +28,7 @@ const MenuContainer: FC<MenuContainerProps> = ({
         src={MenuImage}
         alt="menu"
         onClick={handleClick}
-        className={className}
+        style={{cursor: "pointer"}}
       />
       <Menu
         id="basic-menu"

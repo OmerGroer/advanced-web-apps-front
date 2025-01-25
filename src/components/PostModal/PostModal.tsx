@@ -9,7 +9,7 @@ import useToastError from "../../hooks/useToastError";
 
 interface PostModalProps {
   postId: string;
-  onClose: () => void;
+  onClose: (wasDeleted: boolean) => void;
 }
 
 const PostModal: FC<PostModalProps> = ({ postId, onClose }) => {
@@ -22,13 +22,13 @@ const PostModal: FC<PostModalProps> = ({ postId, onClose }) => {
   };
 
   return createPortal(
-    <div className={style.backdrop} onClick={onClose}>
+    <div className={style.backdrop} onClick={() => onClose(false)}>
       <div className={style.modal} onClick={onModalClick}>
-        <span className={style.x} onClick={onClose}>
+        <span className={style.x} onClick={() => onClose(false)}>
           ×
         </span>
         <div className={style.postContainer}>
-          {post && <Post post={post!} onEdit={(post) => setPost(post)} />}
+          {post && <Post post={post!} onEdit={(post) => setPost(post)} onDelete={() => onClose(true)} />}
           {isLoading && <CircularProgress />}
         </div>
         <div>

@@ -70,6 +70,8 @@ const onSubmit = async (
         } else {
           onClose();
         }
+
+        toast.success("Post was updated successfully");
       } else if (restaurant) {
         await postService.createPost(
           {
@@ -88,8 +90,9 @@ const onSubmit = async (
       return {};
     }
   } catch (error) {
+    console.error(error)
     const innerError = error as { response: { data: string }; message: string };
-    toast.error(innerError.response.data || innerError.message);
+    toast.error(innerError.response.data || "Problem has occured");
   }
 
   return { data, error };

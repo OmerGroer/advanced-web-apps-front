@@ -1,16 +1,20 @@
 import { FC, useState } from "react";
 import style from "./Post.module.css";
-import { Post as IPost } from "../../services/postService";
+import postService, { Post as IPost } from "../../services/postService";
 import starImg from "../../assets/star_on.png";
 import Image from "../Image/Image";
 import UserDetailWithMenu from "../UserDetails/UserDetailsWithMenu";
 import AddPost from "../AddPost/AddPost";
+import { toast } from "react-toastify";
+import userService from "../../services/userService";
+import MenuContainer from "../MenuContainer/MenuContainer";
 
 interface PostProps {
   post: IPost;
   withoutUser?: boolean;
   children?: React.ReactNode;
   onEdit: (post: IPost) => void;
+  onDelete: (postId: string) => void;
 }
 
 const Post: FC<PostProps> = ({
@@ -18,6 +22,7 @@ const Post: FC<PostProps> = ({
   children,
   withoutUser = false,
   onEdit,
+  onDelete,
 }) => {
   const [isEdit, setEdit] = useState<boolean>(false);
 
@@ -26,7 +31,20 @@ const Post: FC<PostProps> = ({
     close();
   };
 
-  const onDeleteClick = (close: () => void) => {};
+  const onDeleteClick = (close: () => void) => {
+    postService
+      .deletePost(post._id)
+      .request.then(() => {
+        close();
+        toast.success("Post was deleted successfully");
+        onDelete(post._id);
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Problem has occured");
+        close();
+      });
+  };
 
   const onEditClose = (post?: IPost) => {
     setEdit(false);
@@ -43,11 +61,17 @@ const Post: FC<PostProps> = ({
           user={post.sender}
         />
       )}
-      <div>
-        <span className={style.restaurantName}>{post.restaurant.name}</span>
-        {Array.from({ length: post.rating }).map((_, index) => (
-          <img key={index} src={starImg} alt="star" className={style.star} />
-        ))}
+      <div className={style.restaurantContainer}>
+        <div>
+          <span className={style.restaurantName}>{post.restaurant.name}</span>
+          {Array.from({ length: post.rating }).map((_, index) => (
+            <img key={index} src={starImg} alt="star" className={style.star} />
+          ))}
+        </div>
+
+        {withoutUser && post.sender._id === userService.getLoggedUserId() && (
+          <MenuContainer onDelete={onDeleteClick} onUpdate={onUpdateClick} />
+        )}
       </div>
       <p className={style.content}>{post.content}</p>
       <Image

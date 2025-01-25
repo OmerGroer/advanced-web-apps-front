@@ -59,4 +59,10 @@ const updatePost = (postId: string, post: Omit<NewPost, "restaurant">) => {
   return { request, abort: () => abortController.abort() };
 };
 
-export default { getAllPosts, getPostById, createPost, updatePost };
+const deletePost = (postId: string) => {
+  const abortController = new AbortController();
+  const request = apiClient.delete<Post>(`/posts/${postId}`);
+  return { request, abort: () => abortController.abort() };
+};
+
+export default { getAllPosts, getPostById, createPost, updatePost, deletePost };
