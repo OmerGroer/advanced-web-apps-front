@@ -1,5 +1,5 @@
-import { Restaurant } from "../hooks/useRestaurants";
 import apiClient, { Page } from "./apiClient";
+import { Restaurant } from "./restaurantService";
 import { User } from "./userService";
 
 export interface Post extends Omit<NewPost, "restaurant"> {

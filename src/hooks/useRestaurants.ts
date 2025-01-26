@@ -1,14 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { CanceledError } from "../services/apiClient";
-import restaurantService from "../services/restaurantService";
-
-export interface Restaurant {
-  _id: string;
-  name: string;
-  address: string;
-  category?: string;
-  priceTypes: string;
-}
+import restaurantService, { Restaurant } from "../services/restaurantService";
 
 const useRestaurants = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
