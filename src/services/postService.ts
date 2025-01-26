@@ -28,7 +28,7 @@ const getAllPosts = (
   const abortController = new AbortController();
 
   let query = userId ? `sender=${userId}&` : "";
-  query = userId ? `restaurant=${restaurantId}&` : "";
+  query += restaurantId ? `restaurant=${restaurantId}&` : "";
   query += times.min ? `min=${times.min}&` : "";
   query += times.max ? `max=${times.max}` : "";
 

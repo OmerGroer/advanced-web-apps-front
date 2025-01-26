@@ -10,7 +10,7 @@ interface UserDetailsProps {
 
 const UserDetail: FC<UserDetailsProps> = ({ user, style, onClick }) => {
   return (
-    <div className={style.userDetails} onClick={onClick}>
+    <div className={style.userDetails} onClick={onClick} style={onClick ? {cursor: "pointer"} : {}}>
       <Image
         src={`${import.meta.env.VITE_SERVER_URL}${user.avatarUrl}`}
         alt={user.username}

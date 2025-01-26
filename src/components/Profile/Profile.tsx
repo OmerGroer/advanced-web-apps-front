@@ -8,16 +8,23 @@ import useToastError from "../../hooks/useToastError";
 import ProfileForm from "../ProfileForm/ProfileForm";
 import useById from "../../hooks/useById";
 
-const Profile: FC = () => {
-  const userId = userService.getLoggedUserId();
+interface ProfileProps {
+  id?: string;
+}
+
+const Profile: FC<ProfileProps> = ({ id }) => {
+  const userId = id || userService.getLoggedUserId();
   const [isEdit, setEdit] = useState<boolean>(false);
-  const { item, error, isLoading, setItem } = useById<User>(userId, userService.getUserById);
+  const { item, error, isLoading, setItem } = useById<User>(
+    userId,
+    userService.getUserById
+  );
   useToastError(error);
 
   if (!userId) return;
 
   const onCloseModal = (user?: User) => {
-    if (user) setItem(user)
+    if (user) setItem(user);
     setEdit(false);
   };
 
@@ -29,11 +36,11 @@ const Profile: FC = () => {
         </div>
       ) : (
         item && (
-          <UserDetail style={style} user={item} onClick={() => setEdit(true)} />
+          <UserDetail style={style} user={item} onClick={!id ? () => setEdit(true) : undefined} />
         )
       )}
       <div className={style.postsContainer}>
-        <PostsList userId={userId} />
+        <PostsList userId={userId} key={userId} />
       </div>
       {isEdit && item && <ProfileForm onClose={onCloseModal} user={item} />}
     </>

@@ -6,6 +6,7 @@ import Navbar, { Endpoints } from "../Navbar/Navbar";
 import { useState } from "react";
 import LoginContainer from "../LoginContainer/LoginContainer";
 import RestaurantPage from "../RestaurantPage/RestaurantPage";
+import FloatingProfile from "../FloatingProfile/FloatingProfile";
 
 function App() {
   const [isLogged, setLogged] = useState<boolean>(false);
@@ -25,6 +26,7 @@ function App() {
         style={{ zIndex: "999999999999" }}
       />
       <RestaurantPage />
+      <FloatingProfile />
       <div className={style.main}>
         {!isLogged ? (
           <LoginContainer setLogged={() => setLogged(true)} />
