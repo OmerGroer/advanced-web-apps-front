@@ -1,0 +1,17 @@
+.restaurantName {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #091829;
+}
+
+.content {
+    margin-top: 10px;
+    font-size: 1.2em;
+    color: #091829;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}

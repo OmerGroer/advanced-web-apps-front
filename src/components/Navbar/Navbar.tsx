@@ -5,7 +5,7 @@ import classNames from "classnames";
 import Profile from "../Profile/Profile";
 import userService from "../../services/userService";
 import RestaurantsList from "../RestaurantsList/RestaurantsList";
-import PostsList from "../PostsList/PostsList";
+import Feed from "../Feed/Feed";
 import Search from "../RestaurantsSearch/RestaurantsSearch";
 
 interface Endpoint {
@@ -18,7 +18,7 @@ export const Endpoints: Endpoint[] = [
   {
     name: "Feed",
     path: "/",
-    element: <PostsList />,
+    element: <Feed />,
   },
   {
     name: "New",
