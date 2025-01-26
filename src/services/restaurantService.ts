@@ -1,4 +1,5 @@
 import axios from "axios";
+import apiClient, { Page } from "./apiClient";
 
 interface ApiRestaurant {
   address: {
@@ -19,7 +20,19 @@ export interface RestaurantPage {
   };
 }
 
-const apiClient = axios.create({
+export interface Restaurant {
+  _id: string;
+  name: string;
+  address: string;
+  category?: string;
+  priceTypes: string;
+}
+
+export interface RatingRestaurant extends Restaurant {
+  rating: number;
+}
+
+const apiClientExternal = axios.create({
   baseURL: "https://real-time-tripadvisor-scraper-api.p.rapidapi.com/",
   headers: {
     "x-rapidapi-host": "real-time-tripadvisor-scraper-api.p.rapidapi.com",
@@ -33,7 +46,7 @@ const getRestaurants = (location: string, cursor?: string | null) => {
   let query = `location=${location}`;
   query += cursor ? `&cursor=${cursor}` : "";
 
-  const request = apiClient.get<RestaurantPage>(
+  const request = apiClientExternal.get<RestaurantPage>(
     `/tripadvisor_restaurants_search_v2?${query}`,
     {
       signal: abortController.signal,
@@ -42,4 +55,28 @@ const getRestaurants = (location: string, cursor?: string | null) => {
   return { request, abort: () => abortController.abort() };
 };
 
-export default { getRestaurants };
+const searchRestaurants = (
+  times: { min?: string; max?: string },
+  value: string
+) => {
+  const abortController = new AbortController();
+
+  let query = `like=${value}&`;
+  query += times.min ? `min=${times.min}&` : "";
+  query += times.max ? `max=${times.max}` : "";
+
+  const request = apiClient.get<Page<RatingRestaurant>>(`/restaurants?${query}`, {
+    signal: abortController.signal,
+  });
+  return { request, abort: () => abortController.abort() };
+};
+
+const getById = (id: string) => {
+  const abortController = new AbortController();
+  const request = apiClient.get<RatingRestaurant>(`/restaurants/${id}`, {
+    signal: abortController.signal,
+  });
+  return { request, abort: () => abortController.abort() };
+};
+
+export default { getRestaurants, searchRestaurants, getById };

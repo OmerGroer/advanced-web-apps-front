@@ -1,11 +1,12 @@
 import { FC, useState } from "react";
 import style from "./RestaurantsList.module.css";
-import useRestaurants, { Restaurant } from "../../hooks/useRestaurants";
+import useRestaurants from "../../hooks/useRestaurants";
 import useToastError from "../../hooks/useToastError";
 import useScroll from "../../hooks/useScroll";
 import { CircularProgress } from "@mui/material";
-import RestaurantSearch from "../RestaurantSearch/RestaurantSearch";
 import AddPost from "../AddPost/AddPost";
+import SearchForm from "../SearchForm/SearchForm";
+import { Restaurant } from "../../services/restaurantService";
 
 const RestaurantsList: FC = () => {
   const [selectedRestaurant, setSelectedResstaurant] = useState<Restaurant | null>(null)
@@ -22,7 +23,7 @@ const RestaurantsList: FC = () => {
 
   return (
     <>
-      <RestaurantSearch onSubmit={(location) => searchRestaurants(location)} />
+      <SearchForm onSubmit={(location) => searchRestaurants(location)} placeholder="Country/City/ZIP code/Address/Neighborhood" />
       <div className={style.restaurantsList} ref={listRef}>
         {restaurants.map((restaurant) => (
           <div key={restaurant._id} className={style.row} onClick={() => setSelectedResstaurant(restaurant)}>

@@ -1,6 +1,5 @@
 import { FC, useActionState, useRef } from "react";
 import style from "./AddPost.module.css";
-import { Restaurant } from "../../hooks/useRestaurants";
 import { CircularProgress, Rating } from "@mui/material";
 import { createPortal } from "react-dom";
 import RestaurantImage from "../../assets/restaurant.png";
@@ -9,6 +8,7 @@ import imageService from "../../services/imageService";
 import postService, { Post } from "../../services/postService";
 import { toast } from "react-toastify";
 import ImageInput, { ImageInputHandle } from "../Inputs/ImageInput";
+import { Restaurant } from "../../services/restaurantService";
 
 interface FormFields {
   content?: string;
