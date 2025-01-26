@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import style from "./RestaurantPage.module.css";
 import PostsList from "../PostsList/PostsList";
 import { CircularProgress } from "@mui/material";
@@ -10,11 +10,13 @@ import restaurantService, {
 import { createPortal } from "react-dom";
 import RestaurantDetails from "../RestaurantDetails/RestaurantDetails";
 import useSingletonId from "../../hooks/useSingletonId";
+import AddPost from "../AddPost/AddPost";
 
 export const SHOW_RESTAURANT = "SHOW_RESTAURANT";
 
 const RestaurantPage: FC = () => {
   const { id, clear } = useSingletonId(SHOW_RESTAURANT);
+  const [isAdding, setAdding] = useState<boolean>(false);
   const { item, error, isLoading } = useById<RatingRestaurant>(
     id,
     restaurantService.getById
@@ -23,17 +25,18 @@ const RestaurantPage: FC = () => {
 
   if (!id) return;
 
-  const onModalClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.stopPropagation();
-  };
+  const onAddingClose = () => {
+    setAdding(false);
+    clear();
+  }
 
   return createPortal(
-    <div className={style.backdrop} onClick={clear}>
-      <div className={style.modal} onClick={onModalClick}>
+    <div className={style.backdrop}>
+      <div className={style.modal}>
         <span className={style.x} onClick={clear}>
           ×
         </span>
-        <span className={style.plus} onClick={clear}>
+        <span className={style.plus} onClick={() => setAdding(true)}>
           +
         </span>
         {isLoading ? (
@@ -53,6 +56,7 @@ const RestaurantPage: FC = () => {
           <PostsList restaurantId={id} />
         </div>
       </div>
+      {isAdding && item && <AddPost onClose={onAddingClose} restaurant={item} />}
     </div>,
     document.getElementById("root")!
   );
