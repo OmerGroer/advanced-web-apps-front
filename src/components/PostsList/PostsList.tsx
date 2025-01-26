@@ -9,12 +9,14 @@ import postService, { Post as IPost } from "../../services/postService";
 import likeService from "../../services/likeService";
 import { toast } from "react-toastify";
 import useScroll from "../../hooks/useScroll";
+import Recommendation from "../Recommendation/Recommendation";
 
 interface PostsListProps {
   userId?: string;
+  withRecommendation?: boolean;
 }
 
-const PostsList: FC<PostsListProps> = ({ userId }) => {
+const PostsList: FC<PostsListProps> = ({ userId, withRecommendation = false }) => {
   const { posts, setPosts, fetchPosts, isLoading, error } = usePosts(userId);
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const listRef = useScroll<HTMLDivElement>(fetchPosts);
@@ -81,6 +83,7 @@ const PostsList: FC<PostsListProps> = ({ userId }) => {
 
   return (
     <div className={style.postsList} ref={listRef}>
+      {withRecommendation && <Recommendation />}
       {posts.map((post) => (
         <Post
           key={post._id}
