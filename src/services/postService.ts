@@ -22,11 +22,13 @@ interface NewPost {
 
 const getAllPosts = (
   times: { min?: string; max?: string },
-  userId?: string
+  userId?: string,
+  restaurantId?: string,
 ) => {
   const abortController = new AbortController();
 
   let query = userId ? `sender=${userId}&` : "";
+  query = userId ? `restaurant=${restaurantId}&` : "";
   query += times.min ? `min=${times.min}&` : "";
   query += times.max ? `max=${times.max}` : "";
 

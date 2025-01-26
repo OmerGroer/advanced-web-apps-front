@@ -12,10 +12,11 @@ import useScroll from "../../hooks/useScroll";
 
 interface PostsListProps {
   userId?: string;
+  restaurantId?: string;
 }
 
-const PostsList: FC<PostsListProps> = ({ userId }) => {
-  const { posts, setPosts, fetchPosts, isLoading, error } = usePosts(userId);
+const PostsList: FC<PostsListProps> = ({ userId, restaurantId }) => {
+  const { posts, setPosts, fetchPosts, isLoading, error } = usePosts(userId, restaurantId);
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const listRef = useScroll<HTMLDivElement>(fetchPosts);
 

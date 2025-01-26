@@ -1,23 +1,30 @@
 import { FC } from "react";
 import style from "./RestaurantsSearch.module.css";
 import SearchForm from "../SearchForm/SearchForm";
-import { CircularProgress, Rating } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import useToastError from "../../hooks/useToastError";
 import useScroll from "../../hooks/useScroll";
 import useSearch from "../../hooks/useSearch";
-import restaurantService, { RatingRestaurant } from "../../services/restaurantService";
+import restaurantService, {
+  RatingRestaurant,
+} from "../../services/restaurantService";
+import {
+  SHOW_RESTAURANT,
+  ShowRestaurantEvent,
+} from "../RestaurantPage/RestaurantPage";
+import RestaurantDetails from "../RestaurantDetails/RestaurantDetails";
 
 const RestaurantsSearch: FC = () => {
-  const {
-    items,
-    search,
-    loadMore,
-    isLoading,
-    error,
-    value,
-  } = useSearch<RatingRestaurant>(restaurantService.searchRestaurants);
+  const { items, search, loadMore, isLoading, error, value } =
+    useSearch<RatingRestaurant>(restaurantService.searchRestaurants);
   const listRef = useScroll<HTMLDivElement>(loadMore);
   useToastError(error);
+
+  const onClick = (id: string) => {
+    document.dispatchEvent(
+      new CustomEvent<ShowRestaurantEvent>(SHOW_RESTAURANT, { detail: { id } })
+    );
+  };
 
   return (
     <>
@@ -27,13 +34,12 @@ const RestaurantsSearch: FC = () => {
       />
       <div className={style.restaurantsList} ref={listRef}>
         {items.map((restaurant) => (
-          <div key={restaurant._id} className={style.row}>
-            <span style={{ fontWeight: "bold" }}>{restaurant.name}<Rating defaultValue={restaurant.rating} size="large" readOnly /></span>
-            <span style={{ fontSize: ".8em" }}>
-              {restaurant.category ? `${restaurant.category} - ` : ""}
-              {restaurant.address}
-            </span>
-          </div>
+          <RestaurantDetails
+            restaurant={restaurant}
+            style={style}
+            onClick={() => onClick(restaurant._id)}
+            rating={restaurant.rating}
+          />
         ))}
         {isLoading ? (
           items.length ? (
@@ -44,8 +50,7 @@ const RestaurantsSearch: FC = () => {
             <CircularProgress />
           )
         ) : (
-          items.length === 0 &&
-          value !== "" && <p>There is no restaurants</p>
+          items.length === 0 && value !== "" && <p>There is no restaurants</p>
         )}
       </div>
     </>

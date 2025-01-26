@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Navbar, { Endpoints } from "../Navbar/Navbar";
 import { useState } from "react";
 import LoginContainer from "../LoginContainer/LoginContainer";
+import RestaurantPage from "../RestaurantPage/RestaurantPage";
 
 function App() {
   const [isLogged, setLogged] = useState<boolean>(false);
@@ -23,6 +24,7 @@ function App() {
         theme={"colored"}
         style={{ zIndex: "999999999999" }}
       />
+      <RestaurantPage />
       <div className={style.main}>
         {!isLogged ? (
           <LoginContainer setLogged={() => setLogged(true)} />

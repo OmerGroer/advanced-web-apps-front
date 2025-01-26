@@ -71,4 +71,12 @@ const searchRestaurants = (
   return { request, abort: () => abortController.abort() };
 };
 
-export default { getRestaurants, searchRestaurants };
+const getById = (id: string) => {
+  const abortController = new AbortController();
+  const request = apiClient.get<RatingRestaurant>(`/restaurants/${id}`, {
+    signal: abortController.signal,
+  });
+  return { request, abort: () => abortController.abort() };
+};
+
+export default { getRestaurants, searchRestaurants, getById };

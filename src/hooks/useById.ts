@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import { CanceledError } from "../services/apiClient";
-import userService, { User } from "../services/userService";
+import { AxiosResponse } from "axios";
 
-const useUserById = (userId: string | null) => {
-  const [user, setUser] = useState<User | null>(null);
+export type ByIdFunction<T> = (id: string) => {request: Promise<AxiosResponse<T>>, abort: () => void}
+
+const useById = <T>(id: string | null, byIdFunction: ByIdFunction<T>) => {
+  const [item, setItem] = useState<T | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!userId) return
+    if (!id) return
     setIsLoading(true);
-    const { request, abort } = userService.getUserById(userId);
+    const { request, abort } = byIdFunction(id);
     request
       .then((res) => {
-        setUser(res.data);
+        setItem(res.data);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -24,9 +26,9 @@ const useUserById = (userId: string | null) => {
       });
 
     return abort;
-  }, []);
+  }, [id]);
 
-  return { user, setUser, error, isLoading };
+  return { item, setItem, error, isLoading };
 };
 
-export default useUserById;
+export default useById;
