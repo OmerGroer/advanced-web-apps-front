@@ -8,11 +8,9 @@ import useSearch from "../../hooks/useSearch";
 import restaurantService, {
   RatingRestaurant,
 } from "../../services/restaurantService";
-import {
-  SHOW_RESTAURANT,
-  ShowRestaurantEvent,
-} from "../RestaurantPage/RestaurantPage";
+import { SHOW_RESTAURANT } from "../RestaurantPage/RestaurantPage";
 import RestaurantDetails from "../RestaurantDetails/RestaurantDetails";
+import { ShowEvent } from "../../hooks/useSingletonId";
 
 const RestaurantsSearch: FC = () => {
   const { items, search, loadMore, isLoading, error, value } =
@@ -22,19 +20,20 @@ const RestaurantsSearch: FC = () => {
 
   const onClick = (id: string) => {
     document.dispatchEvent(
-      new CustomEvent<ShowRestaurantEvent>(SHOW_RESTAURANT, { detail: { id } })
+      new CustomEvent<ShowEvent>(SHOW_RESTAURANT, { detail: { id } })
     );
   };
 
   return (
     <>
       <SearchForm
-        placeholder="Name/Place/cuisines"
+        placeholder="Name/Place/Cuisines"
         onSubmit={(value) => search(value)}
       />
       <div className={style.restaurantsList} ref={listRef}>
         {items.map((restaurant) => (
           <RestaurantDetails
+            key={restaurant._id}
             restaurant={restaurant}
             style={style}
             onClick={() => onClick(restaurant._id)}

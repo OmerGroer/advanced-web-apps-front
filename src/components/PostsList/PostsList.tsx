@@ -55,7 +55,7 @@ const PostsList: FC<PostsListProps> = ({
         await likeService.like(post._id);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       const innerError = error as {
         response: { data: string };
         message: string;

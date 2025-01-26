@@ -6,7 +6,8 @@ import Profile from "../Profile/Profile";
 import userService from "../../services/userService";
 import RestaurantsList from "../RestaurantsList/RestaurantsList";
 import Feed from "../Feed/Feed";
-import Search from "../RestaurantsSearch/RestaurantsSearch";
+import RestaurantsSearch from "../RestaurantsSearch/RestaurantsSearch";
+import UsersSearch from "../UsersSearch/UsersSearch";
 
 interface Endpoint {
   name: string;
@@ -28,7 +29,12 @@ export const Endpoints: Endpoint[] = [
   {
     name: "Restaurants",
     path: "/search/restaurants",
-    element: <Search />,
+    element: <RestaurantsSearch />,
+  },
+  {
+    name: "Users",
+    path: "/search/users",
+    element: <UsersSearch />,
   },
   {
     name: "Profile",

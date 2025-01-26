@@ -1,4 +1,4 @@
-import apiClient from "./apiClient";
+import apiClient, { Page } from "./apiClient";
 
 export interface User {
   _id: string;
@@ -77,6 +77,22 @@ const logout = (refreshToken: string) => {
   return { request, abort: () => abortController.abort() };
 };
 
+const searchUsers = (
+  times: { min?: string; max?: string },
+  value: string
+) => {
+  const abortController = new AbortController();
+
+  let query = `like=${value}&`;
+  query += times.min ? `min=${times.min}&` : "";
+  query += times.max ? `max=${times.max}` : "";
+
+  const request = apiClient.get<Page<User>>(`/users?${query}`, {
+    signal: abortController.signal,
+  });
+  return { request, abort: () => abortController.abort() };
+};
+
 const getLoggedUserId = () => localStorage.getItem("id");
 
-export default { getUserById, getLoggedUserId, register, login, refresh, logout, update };
+export default { getUserById, getLoggedUserId, register, login, refresh, logout, update, searchUsers };
