@@ -1,11 +1,12 @@
 import { FC } from "react";
 import { createPortal } from "react-dom";
 import style from "./PostModal.module.css";
-import usePostById from "../../hooks/usePostById";
 import Post from "../Post/Post";
 import { CircularProgress } from "@mui/material";
 import CommentsList from "../CommentsList/CommentsList";
 import useToastError from "../../hooks/useToastError";
+import useById from "../../hooks/useById";
+import postService, { Post as IPost } from "../../services/postService";
 
 interface PostModalProps {
   postId: string;
@@ -13,7 +14,7 @@ interface PostModalProps {
 }
 
 const PostModal: FC<PostModalProps> = ({ postId, onClose }) => {
-  const { post, setPost, error, isLoading } = usePostById(postId);
+  const { item: post, setItem: setPost, error, isLoading } = useById<IPost>(postId, postService.getPostById);
 
   useToastError(error);
 
