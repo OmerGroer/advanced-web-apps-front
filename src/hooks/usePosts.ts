@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import postService, { Post } from "../services/postService";
 import { CanceledError } from "../services/apiClient";
 
-const usePosts = (userId?: string) => {
+const usePosts = (userId?: string, restaurantId?: string) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -14,7 +14,7 @@ const usePosts = (userId?: string) => {
     if (isLoadingRef.current) return;
     isLoadingRef.current = true;
     setIsLoading(true);
-    const { request, abort } = postService.getAllPosts(times.current, userId);
+    const { request, abort } = postService.getAllPosts(times.current, userId, restaurantId);
     request
       .then((res) => {
         const { data, ...rest } = res.data;

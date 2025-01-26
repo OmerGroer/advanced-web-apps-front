@@ -1,0 +1,60 @@
+.backdrop {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+}
+
+.modal {
+    height: 95vh;
+    width: 40vw;
+    border-radius: .7em;
+    background-color: #F0EBD8;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: .7em;
+    box-sizing: border-box;
+}
+
+.postsContainer {
+    height: calc(100% - 4.5em);
+}
+
+.spinnerContainer {
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: .4em;
+}
+
+.x {
+    position: absolute;
+    top: 0;
+    left: .1em;
+    cursor: pointer;
+    font-weight: bold;    
+    font-size: 1em;
+}
+
+.plus {
+    position: absolute;
+    top: 0;
+    right: .5em;
+    cursor: pointer;
+    font-weight: bold;    
+    font-size: 2em;
+}
+
+.row {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: .5em;    
+    padding-bottom: .5em;
+    border-bottom: #748CAB 1px solid;
+}

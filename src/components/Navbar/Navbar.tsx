@@ -6,6 +6,7 @@ import Profile from "../Profile/Profile";
 import userService from "../../services/userService";
 import RestaurantsList from "../RestaurantsList/RestaurantsList";
 import Feed from "../Feed/Feed";
+import Search from "../RestaurantsSearch/RestaurantsSearch";
 
 interface Endpoint {
   name: string;
@@ -23,6 +24,11 @@ export const Endpoints: Endpoint[] = [
     name: "New",
     path: "/new",
     element: <RestaurantsList />,
+  },
+  {
+    name: "Restaurants",
+    path: "/search/restaurants",
+    element: <Search />,
   },
   {
     name: "Profile",

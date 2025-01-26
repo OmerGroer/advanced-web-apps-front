@@ -13,11 +13,19 @@ import Recommendation from "../Recommendation/Recommendation";
 
 interface PostsListProps {
   userId?: string;
+  restaurantId?: string;
   withRecommendation?: boolean;
 }
 
-const PostsList: FC<PostsListProps> = ({ userId, withRecommendation = false }) => {
-  const { posts, setPosts, fetchPosts, isLoading, error } = usePosts(userId);
+const PostsList: FC<PostsListProps> = ({
+  userId,
+  restaurantId,
+  withRecommendation = false,
+}) => {
+  const { posts, setPosts, fetchPosts, isLoading, error } = usePosts(
+    userId,
+    restaurantId
+  );
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const listRef = useScroll<HTMLDivElement>(fetchPosts);
 
