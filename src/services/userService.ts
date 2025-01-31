@@ -1,3 +1,4 @@
+import { CredentialResponse } from "@react-oauth/google";
 import apiClient, { Page } from "./apiClient";
 
 export interface User {
@@ -11,7 +12,7 @@ interface FullUser extends Omit<User, "_id"> {
   password: string;
 }
 
-interface LoginResponse {
+export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
   _id: string;
@@ -27,7 +28,15 @@ const getUserById = (userId: string) => {
 
 const register = (user: FullUser) => {
   const abortController = new AbortController();
-  const request = apiClient.post<User>(`/auth/register`, user, {
+  const request = apiClient.post<LoginResponse>(`/auth/register`, user, {
+    signal: abortController.signal,
+  });
+  return { request, abort: () => abortController.abort() };
+};
+
+const googleRegister = (credential: CredentialResponse) => {
+  const abortController = new AbortController();
+  const request = apiClient.post<LoginResponse>(`/auth/google`, credential, {
     signal: abortController.signal,
   });
   return { request, abort: () => abortController.abort() };
@@ -95,4 +104,4 @@ const searchUsers = (
 
 const getLoggedUserId = () => localStorage.getItem("id");
 
-export default { getUserById, getLoggedUserId, register, login, refresh, logout, update, searchUsers };
+export default { getUserById, getLoggedUserId, register, login, refresh, logout, update, searchUsers, googleRegister };

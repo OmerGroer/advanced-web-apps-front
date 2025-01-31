@@ -86,7 +86,7 @@ const Post: FC<PostProps> = ({
       </div>
       <p className={style.content}>{post.content}</p>
       <Image
-        src={`${import.meta.env.VITE_SERVER_URL}${post.imageUrl}`}
+        src={post.imageUrl}
         alt={post.restaurant.name}
         className={style.image}
       />

@@ -61,13 +61,13 @@ const onSubmit = async (
       data.password
     ) {
       const imageResponse = await imageService.uploadImage(data.avatar);
-      await userService.register({
+      const tokens = (await userService.register({
         username: data.username.trim(),
         email: data.email,
         password: data.password,
         avatarUrl: imageResponse.data.url,
-      }).request;
-      await login(data.username, data.password);
+      }).request).data;
+      login(tokens);
 
       return {};
     }

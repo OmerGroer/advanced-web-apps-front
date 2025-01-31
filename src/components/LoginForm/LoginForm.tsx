@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import Input from "../Inputs/Input";
 import { CircularProgress } from "@mui/material";
 import { LoginFunc } from "../LoginContainer/LoginContainer";
+import userService from "../../services/userService";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 
 interface FormFields {
   identifier?: string;
@@ -19,7 +21,10 @@ const onSubmit = async (
 
   try {
     if (data.identifier && data.password) {
-      await login(data.identifier, data.password);
+      const tokens = (
+        await userService.login(data.identifier, data.password).request
+      ).data;
+      login(tokens);
 
       return {};
     } else {
@@ -46,6 +51,26 @@ const LoginForm: FC<LoginProps> = ({ login, switchToRegister, isLoading }) => {
     {}
   );
 
+  const onGoogleSuccess = async (credentialsResponse: CredentialResponse) => {
+    try {
+      const tokens = (
+        await userService.googleRegister(credentialsResponse).request
+      ).data;
+      login(tokens);
+    } catch (error) {
+      console.error(error);
+      const innerError = error as {
+        response: { data: string };
+        message: string;
+      };
+      toast.error(innerError.response.data || "Problem has occured");
+    }
+  };
+
+  const onGoogleError = () => {
+    toast.error("Error was occured will google signing in");
+  };
+
   return (
     <div className={style.container}>
       {(isPending || isLoading) && (
@@ -68,16 +93,18 @@ const LoginForm: FC<LoginProps> = ({ login, switchToRegister, isLoading }) => {
           defaultValue={data?.password}
         />
         <div className={style.buttonsContainer}>
-          <button
-            type="submit"
-            className={"actionButton"}
-          >
+          <button type="submit" className={"actionButton"}>
             Submit
           </button>
-          <button type="button" className={"actionButton"} onClick={switchToRegister}>
+          <button
+            type="button"
+            className={"actionButton"}
+            onClick={switchToRegister}
+          >
             Register
           </button>
         </div>
+        <GoogleLogin onSuccess={onGoogleSuccess} onError={onGoogleError} />
       </form>
     </div>
   );
