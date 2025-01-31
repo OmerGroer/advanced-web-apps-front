@@ -12,7 +12,7 @@ const UserDetail: FC<UserDetailsProps> = ({ user, style, onClick }) => {
   return (
     <div className={style.userDetails} onClick={onClick} style={onClick ? {cursor: "pointer"} : {}}>
       <Image
-        src={`${import.meta.env.VITE_SERVER_URL}${user.avatarUrl}`}
+        src={user.avatarUrl}
         alt={user.username}
         className={style.avatar}
       />

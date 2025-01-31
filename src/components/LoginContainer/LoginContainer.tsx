@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from "react";
 import RegisterForm from "../RegisterForm/RegisterForm";
 import LoginForm from "../LoginForm/LoginForm";
-import userService from "../../services/userService";
+import userService, { LoginResponse } from "../../services/userService";
 import { CanceledError } from "axios";
 
-export type LoginFunc = (identifier: string, password: string) => void;
+export type LoginFunc = (tokens: LoginResponse) => void;
 
 interface LoginContainerProps {
   setLogged: () => void;
@@ -14,11 +14,7 @@ const LoginContainer: FC<LoginContainerProps> = ({ setLogged }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isRegisterForm, setRegisterForm] = useState<boolean>(false);
 
-  const login: LoginFunc = async (identifier: string, password: string) => {
-    const { _id, accessToken, refreshToken } = (
-      await userService.login(identifier, password).request
-    ).data;
-
+  const login: LoginFunc = ({ _id, accessToken, refreshToken }) => {
     localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshToken", refreshToken);
     localStorage.setItem("id", _id);
